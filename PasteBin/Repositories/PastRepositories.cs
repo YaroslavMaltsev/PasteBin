@@ -14,7 +14,13 @@ namespace PasteBinApi.Repositories
         {
             _context = context;
         }
-        public Task<IActionResult> CreatePost()
+        public bool CreatePost(Past past)
+        {
+            _context.Add(past);
+            return Save();
+        }
+
+        public Task<bool> Delete()
         {
             throw new NotImplementedException();
         }
@@ -26,7 +32,14 @@ namespace PasteBinApi.Repositories
 
         public async Task<Past> GetPostHash(string hash)
         {
-            return await _context.Pasts.Where(i => i.HashUrl == hash).FirstOrDefaultAsync();
+            return await _context.Pasts.Where(i => i.HashUrl == hash && i.DateDeiete > DateTime.Now).FirstOrDefaultAsync();
+
+        }
+
+        public bool Save()
+        {
+            var saved =  _context.SaveChanges();
+            return saved != 0 ? true : false;
         }
     }
 }

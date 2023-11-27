@@ -6,7 +6,9 @@ namespace PasteBinApi.Interface
     public interface IPastRepositiries
     {
         public Task<Past> GetPostHash(string hash);
-        public Task<IActionResult> CreatePost();
+        public bool CreatePost(Past past);
         public Task<IActionResult> DelitePost();
+        bool Save();
+        Task<bool> Delete();
     }
 }

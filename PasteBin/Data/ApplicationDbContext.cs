@@ -7,7 +7,7 @@ namespace PasteBin.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            
+
         }
         public DbSet<Past> Pasts { get; set; }
     }
