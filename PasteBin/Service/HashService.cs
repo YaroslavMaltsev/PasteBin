@@ -7,7 +7,7 @@ namespace PasteBinApi.Service
         public static string ToHash(string tohash)
         {
             var toByty = Encoding.UTF8.GetBytes(tohash);
-            return  Convert.ToBase64String(toByty);
+            return Convert.ToBase64String(toByty);
         }
     }
 }

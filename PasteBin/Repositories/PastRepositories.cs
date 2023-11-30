@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PasteBin.Data;
 using PasteBin.Model;
 using PasteBinApi.Interface;
@@ -20,25 +19,38 @@ namespace PasteBinApi.Repositories
             return Save();
         }
 
-        public Task<bool> Delete()
+        public bool Delete(Past past)
         {
-            throw new NotImplementedException();
+            var del = _context.Remove(past);
+            return Save();
         }
 
-        public Task<IActionResult> DelitePost()
+        public Past GetPastById(int Id)
         {
-            throw new NotImplementedException();
+            return _context.Pasts.Where(i => i.Id == Id).FirstOrDefault();
         }
 
-        public async Task<Past> GetPostHash(string hash)
+        public async Task<Past> GetPostByHash(string hash)
         {
-            return await _context.Pasts.Where(i => i.HashUrl == hash && i.DateDeiete > DateTime.Now).FirstOrDefaultAsync();
+            return await _context.Pasts.Where(i => i.HashUrl == hash).FirstOrDefaultAsync();
 
+        }
+
+        public bool HasрExists(string hash)
+        {
+            var exitsts = _context.Pasts.Where(i => i.HashUrl == hash).FirstOrDefault();
+            return exitsts != null ? true : false;
+        }
+
+        public bool PastExists(int Id)
+        {
+            var exitsts = _context.Pasts.Where(i => i.Id == Id).FirstOrDefault();
+            return exitsts != null ? true : false;
         }
 
         public bool Save()
         {
-            var saved =  _context.SaveChanges();
+            var saved = _context.SaveChanges();
             return saved != 0 ? true : false;
         }
     }

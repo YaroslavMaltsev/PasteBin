@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PasteBin.Model;
+﻿using PasteBin.Model;
 
 namespace PasteBinApi.Interface
 {
     public interface IPastRepositiries
     {
-        public Task<Past> GetPostHash(string hash);
+        public Task<Past> GetPostByHash(string hash);
         public bool CreatePost(Past past);
-        public Task<IActionResult> DelitePost();
         bool Save();
-        Task<bool> Delete();
+        bool Delete(Past past);
+        bool PastExists(int Id);
+        public Past GetPastById(int Id);
+        bool HasрExists(string hash);
     }
 }
