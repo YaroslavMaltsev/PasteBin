@@ -2,7 +2,7 @@
 
 namespace PasteBinApi.ResourceModel
 {
-    public class CreatePastDto
+    public class PastDto
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "Название поста не должно быть пустым")]

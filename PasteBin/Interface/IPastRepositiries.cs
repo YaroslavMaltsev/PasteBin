@@ -11,5 +11,6 @@ namespace PasteBinApi.Interface
         bool PastExists(int Id);
         public Past GetPastById(int Id);
         bool HasрExists(string hash);
+        public bool UpdatePast(Past past);
     }
 }

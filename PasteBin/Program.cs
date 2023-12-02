@@ -7,7 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddNewtonsoftJson();// внедрение зависимости для работы HttPast
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -16,7 +17,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 
 option.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString"))
 
-);// подклучение базы данныхк
+);// подключение к базе данных
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

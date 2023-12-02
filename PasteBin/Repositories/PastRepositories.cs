@@ -16,12 +16,14 @@ namespace PasteBinApi.Repositories
         public bool CreatePost(Past past)
         {
             _context.Add(past);
+
             return Save();
         }
 
         public bool Delete(Past past)
         {
             var del = _context.Remove(past);
+
             return Save();
         }
 
@@ -33,25 +35,36 @@ namespace PasteBinApi.Repositories
         public async Task<Past> GetPostByHash(string hash)
         {
             return await _context.Pasts.Where(i => i.HashUrl == hash).FirstOrDefaultAsync();
-
         }
 
         public bool HasрExists(string hash)
         {
             var exitsts = _context.Pasts.Where(i => i.HashUrl == hash).FirstOrDefault();
-            return exitsts != null ? true : false;
+
+           return exitsts != null ? true : false;
         }
 
         public bool PastExists(int Id)
         {
             var exitsts = _context.Pasts.Where(i => i.Id == Id).FirstOrDefault();
+
             return exitsts != null ? true : false;
+
         }
 
         public bool Save()
         {
             var saved = _context.SaveChanges();
+
             return saved != 0 ? true : false;
+
+        }
+
+        public bool UpdatePast(Past past)
+        {
+            var update = _context.Update(past);
+
+            return Save();
         }
     }
 }
