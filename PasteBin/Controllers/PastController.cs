@@ -1,23 +1,25 @@
-﻿using Azure;
-using Microsoft.AspNetCore.JsonPatch;
+﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using PasteBin.Model;
+using PasteBinApi.Dto;
 using PasteBinApi.Interface;
 using PasteBinApi.ResourceModel;
 using PasteBinApi.Service;
+using PasteBinApi.Services;
 
 namespace PasteBinApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PastController(IPastRepositiries pastRepositiries, ILogger<PastController> logger) : Controller
+    public class PastController(IPastRepositiries pastRepositiries, ILogger<PastController> logger) : ControllerBase
     {
         private readonly ILogger<PastController> _logger = logger;
         private readonly IPastRepositiries _pastRepositiries = pastRepositiries;
 
         [HttpGet]
         [Route("{id:int}", Name = "GetPastById")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Past))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetPastDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -34,18 +36,25 @@ namespace PasteBinApi.Controllers
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
-            return Ok(past);
+            var pastDto = new GetPastDto
+            {
+                Id = past.Id,
+                DateDelete = past.DateDelete.Date,
+                Title = past.Title,
+                DtateCreate = past.DtateCreate.Date,
+                HashUrl =  past.HashUrl
+            };
+            return Ok(pastDto);
         }
 
         [HttpGet]
         [Route("{hash}", Name = "GetPastByHash")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PastDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CreatePastDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> GetPostByHash(string hash) // добавить подключение к api
+        public async Task<ActionResult> GetPostByHash(string hash) // добавить подключение к api
         {
             if (string.IsNullOrEmpty(hash))
                 return BadRequest();
@@ -66,7 +75,7 @@ namespace PasteBinApi.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]//Ok
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Create([FromBody] PastDto createPastModel)
+        public IActionResult Create([FromBody] CreatePastDto createPastModel)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -74,8 +83,8 @@ namespace PasteBinApi.Controllers
             var newPast = new Past
             {
                 Title = createPastModel.Title,
-                DateDeiete = createPastModel.DateDelete,
                 DtateCreate = DateTime.Now,
+                DateDelete = TimeCalculationService.GetTimeToDelete(createPastModel.DateSave,createPastModel.DtateCreate),
                 URL = createPastModel.URL,// Создать сервис для загрузки с яндекс Cloud 
                 HashUrl = HashService.ToHash(createPastModel.DtateCreate.ToString())
             };
@@ -88,7 +97,8 @@ namespace PasteBinApi.Controllers
 
             return CreatedAtRoute("GetPastById", new { id = newPast.Id }, newPast);// Возврат созданного поста
         }
-        [HttpDelete("{Id}")]
+        [HttpDelete]
+        [Route("{id:int}", Name = "Delete")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]//BadRequest - документация ошибок
         [ProducesResponseType(StatusCodes.Status204NoContent)]//NoContent
         [ProducesResponseType(StatusCodes.Status404NotFound)]//NotFound
@@ -109,12 +119,12 @@ namespace PasteBinApi.Controllers
             return NoContent();
         }
         [HttpPatch]
-        [Route("{id:int}Update")]
+        [Route("{id:int}",Name="Update")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult PastUpdate (int id,[FromBody] JsonPatchDocument<PastDto> model)
+        public IActionResult PastUpdate (int id,[FromBody] JsonPatchDocument<UpdatePastDto> model)
         {
             if (model == null || id <= 0)
                 return BadRequest();
@@ -124,10 +134,10 @@ namespace PasteBinApi.Controllers
 
             var past = _pastRepositiries.GetPastById(id);
 
-            var pastDto = new PastDto
+            var pastDto = new UpdatePastDto
             {
                 Title = past.Title,
-                DateDelete = past.DateDeiete,
+                DateDelete = past.DateDelete,
             };
             model.ApplyTo(pastDto, ModelState);
            
@@ -135,7 +145,7 @@ namespace PasteBinApi.Controllers
                 return BadRequest(ModelState);
 
             past.Title = pastDto.Title;
-            past.DateDeiete = pastDto.DateDelete;
+            past.DateDelete = pastDto.DateDelete;
             past.HashUrl = HashService.ToHash((pastDto.DateDelete).ToString());
             
             if(_pastRepositiries.UpdatePast(past))
