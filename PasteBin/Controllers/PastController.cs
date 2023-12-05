@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 using PasteBin.Model;
 using PasteBinApi.Dto;
 using PasteBinApi.Interface;
@@ -79,23 +78,29 @@ namespace PasteBinApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest();
-
-            var newPast = new Past
+            try
             {
-                Title = createPastModel.Title,
-                DtateCreate = DateTime.Now,
-                DateDelete = TimeCalculationService.GetTimeToDelete(createPastModel.DateSave,createPastModel.DtateCreate),
-                URL = createPastModel.URL,// Создать сервис для загрузки с яндекс Cloud 
-                HashUrl = HashService.ToHash(createPastModel.DtateCreate.ToString())
-            };
+                var newPast = new Past
+                {
+                    Title = createPastModel.Title,
+                    DtateCreate = DateTime.UtcNow,
+                    DateDelete = TimeCalculationService.GetTimeToDelete(createPastModel.DateSave, DateTime.Now),
+                    URL = "string",// createPastModel.URL,// Создать сервис для загрузки с яндекс Cloud 
+                    HashUrl = HashService.ToHash()
+                };
+                if (newPast == null)
+                   return BadRequest(ModelState);
+                
+                _pastRepositiries.CreatePost(newPast);
+            
+            }
+            catch
+            {
+                return BadRequest($"При создание поста что-то пошло не так");
+            }
 
-            if (newPast == null)
-                return BadRequest(ModelState);
-
-            _pastRepositiries.CreatePost(newPast);
-
-
-            return CreatedAtRoute("GetPastById", new { id = newPast.Id }, newPast);// Возврат созданного поста
+            return NoContent();
+          //  return CreatedAtRoute("GetPastById", new { id = newPast.Id }, newPast);// Возврат созданного поста
         }
         [HttpDelete]
         [Route("{id:int}", Name = "Delete")]
@@ -146,7 +151,7 @@ namespace PasteBinApi.Controllers
 
             past.Title = pastDto.Title;
             past.DateDelete = pastDto.DateDelete;
-            past.HashUrl = HashService.ToHash((pastDto.DateDelete).ToString());
+            past.HashUrl = HashService.ToHash();
             
             if(_pastRepositiries.UpdatePast(past))
                 ModelState.AddModelError("", "Что-то пошло не так при обновлении поста");

@@ -1,32 +1,57 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PastBin.Web.Models;
-using System.Diagnostics;
+using PasteBinWeb.Dto;
 
-namespace PastBin.Web.Controllers
+namespace PasteBinWeb.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        [HttpPost]
+        public async Task<IActionResult> Index(string hash)
         {
-            _logger = logger;
+            GetPastDto pastDto = new GetPastDto();
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync("https://localhost:44373/api/Past/" + hash))
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        GetPastDto getPastDto = JsonConvert.DeserializeObject<GetPastDto>(apiResponse);
+                    }
+                    else
+                        ViewBag.StatusCode = response.StatusCode;
+                }
+            }
+            return View(pastDto);
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+
+        public ViewResult GetPastById() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> GetPastById(int id)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            GetPastDto pastDto = new GetPastDto();
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync("https://localhost:44373/api/Past/" + id))
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        GetPastDto getPastDto= JsonConvert.DeserializeObject<GetPastDto>(apiResponse);
+                    }
+                    else
+                        ViewBag.StatusCode = response.StatusCode;
+                }
+            }
+            return View(pastDto);
         }
     }
 }
