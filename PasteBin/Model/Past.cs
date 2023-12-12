@@ -1,7 +1,4 @@
-﻿
-
-using Microsoft.EntityFrameworkCore;
-using PasteBinApi.Model;
+﻿using PasteBinApi.Model;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PasteBin.Model

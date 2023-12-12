@@ -6,12 +6,12 @@ namespace PasteBinApi.Model
     public class Comment
     {
         public int Id { get; set; }
-       
+
         public string Text { get; set; }
-        
+
         [ForeignKey("User")]
         public string UserId { get; set; }
-    
+
         public User User { get; set; }
 
         [DataType(DataType.Date)]

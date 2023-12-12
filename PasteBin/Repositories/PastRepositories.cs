@@ -13,23 +13,23 @@ namespace PasteBinApi.Repositories
         {
             _context = context;
         }
-        public bool CreatePost(Past past)
+        public async Task<bool> CreatePost(Past past)
         {
-            _context.Add(past);
+            await _context.AddAsync(past);
 
-            return Save();
+            return Save().Result;
         }
 
         public bool Delete(Past past)
         {
             var del = _context.Remove(past);
 
-            return Save();
+            return Save().Result;
         }
 
-        public Past GetPastById(int Id)
+        public async Task<Past> GetPastById(int Id)
         {
-            return _context.Pasts.Where(i => i.Id == Id).FirstOrDefault();
+            return await _context.Pasts.Where(i => i.Id == Id).FirstOrDefaultAsync();
         }
 
         public async Task<Past> GetPostByHash(string hash)
@@ -37,24 +37,24 @@ namespace PasteBinApi.Repositories
             return await _context.Pasts.Where(i => i.HashUrl == hash).FirstOrDefaultAsync();
         }
 
-        public bool HasрExists(string hash)
+        public bool HashExists(string hash)
         {
-            var exitsts = _context.Pasts.Where(i => i.HashUrl == hash).FirstOrDefault();
+            var exists = _context.Pasts.Where(i => i.HashUrl == hash).FirstOrDefault();
 
-           return exitsts != null ? true : false;
+            return exists != null ? true : false;
         }
 
         public bool PastExists(int Id)
         {
-            var exitsts = _context.Pasts.Where(i => i.Id == Id).FirstOrDefault();
+            var exists = _context.Pasts.Where(i => i.Id == Id).FirstOrDefault();
 
-            return exitsts != null ? true : false;
+            return exists != null ? true : false;
 
         }
 
-        public bool Save()
+        public async Task<bool> Save()
         {
-            var saved = _context.SaveChanges();
+            var saved = await _context.SaveChangesAsync();
 
             return saved != 0 ? true : false;
 
@@ -62,9 +62,9 @@ namespace PasteBinApi.Repositories
 
         public bool UpdatePast(Past past)
         {
-            var update = _context.Update(past);
+            var update =  _context.Update(past);
 
-            return Save();
+            return Save().Result;
         }
     }
 }

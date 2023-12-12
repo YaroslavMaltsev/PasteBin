@@ -1,13 +1,13 @@
-﻿using System.Text;
+﻿using PasteBinApi.Interface;
+using System.Text;
 
 namespace PasteBinApi.Service
 {
-    public static class HashService
+    public class HashService : IHashService
     {
-        public static string ToHash()
+        public string ToHash()
         {
-            var toByty = Encoding.UTF8.GetBytes(DateTime.Now.Microsecond.ToString());
-            return Convert.ToBase64String(toByty);
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(DateTime.Now.Ticks.ToString()));
         }
     }
 }

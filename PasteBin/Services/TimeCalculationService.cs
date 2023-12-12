@@ -1,15 +1,13 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using PasteBinApi.Interface;
 
 namespace PasteBinApi.Services
 {
-    public static class TimeCalculationService
+    public class TimeCalculationService : ITimeCalculationService
     {
-        public static DateTime GetTimeToDelete(double timeSave,DateTime dateCreate)
+        public DateTime GetTimeToDelete(double timeSave)
         {
-      
-            
-                return dateCreate.AddDays(timeSave);
-           
+
+            return DateTime.UtcNow.AddDays(timeSave);
         }
     }
 }
