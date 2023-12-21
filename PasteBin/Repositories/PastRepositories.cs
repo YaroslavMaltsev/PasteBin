@@ -62,7 +62,7 @@ namespace PasteBinApi.Repositories
 
         public bool UpdatePast(Past past)
         {
-            var update =  _context.Update(past);
+            var update = _context.Update(past);
 
             return Save().Result;
         }

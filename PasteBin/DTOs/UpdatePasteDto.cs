@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PasteBinApi.Dto
+namespace PasteBinApi.ResourceModel
 {
-    public class UpdatePastDto
+    public class UpdatePasteDto
     {
         [Required(ErrorMessage = "Название поста не должно быть пустым")]
         [StringLength(30, ErrorMessage = "Пожалуйста сократите название поста")]

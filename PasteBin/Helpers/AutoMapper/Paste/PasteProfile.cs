@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using PasteBin.Model;
-using PasteBinApi.Dto;
+using PasteBinApi.DTOs;
 using PasteBinApi.Helpers.AutoMapper.Paste.CreateMethods;
-using PasteBinApi.Helpers.AutoMapper.Paste.UpdateMethods;
-using PasteBinApi.ResourceModel;
 
 namespace PasteBinApi.Helpers.AutoMapper.Paste
 {
@@ -12,20 +10,42 @@ namespace PasteBinApi.Helpers.AutoMapper.Paste
 
         public PasteProfile()
         {
-            CreateMap<UpdatePastDto, Past>()
-                .ForMember
-                (
-                dest => dest.Title,
-                opt => opt.MapFrom(src => src.Title))
-                .ForMember
-                (
-                dest => dest.DateDelete,
-                opt => opt.MapFrom<TimeCalculationResolver>()
-                );
+            //CreateMap<UpdateFileDto, Past>()
+            //    .ForMember
+            //    (
+            //    dest => dest.Id,
+            //    opt => opt.MapFrom(scr => scr.Id)
+            //    )
+            //    .ForMember
+            //    (
+            //    dest => dest.URL,
+            //    opt => opt.MapFrom<UpdateFileResolver>()
+            //    ).ForMember
+            //    (
+            //    dest => dest.HashUrl,
+            //    opt => opt.MapFrom(scr => scr) 
+            //    );
 
-            CreateMap<Past,GetPastDto>();
+            //CreateMap<UpdatePasteDto, Past>()
+            //    .ForMember
+            //    (
+            //    dest => dest.Title,
+            //    opt => opt.MapFrom(src => src.Title))
+            //    .ForMember
+            //    (
+            //    dest => dest.DateDelete,
+            //    opt => opt.MapFrom<UpdateTimeCalculationResolver>()
+            //    )
+            //    .ForMember
+            //    (
+            //    dest => dest.HashUrl,
+            //    opt => opt.MapFrom<UpdateHashUriResolver>()
+            //    );
 
-            CreateMap<CreatePastDto, Past>()
+
+            CreateMap<Past, GetPastDto>();
+
+            CreateMap<CreatePasteDto, Past>()
                 .ForMember
                 (
                 dest => dest.Title,
@@ -44,7 +64,7 @@ namespace PasteBinApi.Helpers.AutoMapper.Paste
                 .ForMember
                 (
                 dest => dest.URL,
-                opt => opt.MapFrom<FileResolver>()
+                opt => opt.MapFrom<UploadFileResolver>()
                 )
                 .ForMember
                 (

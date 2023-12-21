@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PasteBin.Model;
-using PasteBinApi.Dto;
+using PasteBinApi.DTOs;
 using PasteBinApi.Interface;
 using PasteBinApi.ResourceModel;
 
@@ -10,12 +10,14 @@ namespace PasteBinApi.Controllers
     [ApiController]
     [Route("api/[controller]")]
     public class PastController(IPastRepositiries pastRepositories,
-        ILogger<PastController> logger, IMapper mapper
+        ILogger<PastController> logger, IMapper mapper, ITimeCalculationService timeCalculation,
+        IHashService hashService
         ) : ControllerBase
     {
         private readonly ILogger<PastController> _logger = logger;
         private readonly IMapper _mapper = mapper;
-
+        private readonly ITimeCalculationService _timeCalculation = timeCalculation;
+        private readonly IHashService _hashService = hashService;
         private readonly IPastRepositiries _pastRepositories = pastRepositories;
 
         [HttpGet]
@@ -24,7 +26,7 @@ namespace PasteBinApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetPastById(int id)
+        public async Task<ActionResult> GetPastById(int id)
         {
             _logger.LogInformation("GetPastById method stared");// Сообщение что метод запущен
             if (!_pastRepositories.PastExists(id))
@@ -33,7 +35,7 @@ namespace PasteBinApi.Controllers
 
                 return NotFound("Пост не найден");
             }
-            var pastDto =_mapper.Map<GetPastDto>(await _pastRepositories.GetPastById(id));
+            var pastDto = _mapper.Map<GetPastDto>(await _pastRepositories.GetPastById(id));
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -43,7 +45,7 @@ namespace PasteBinApi.Controllers
 
         [HttpGet]
         [Route("{hash}", Name = "GetPastByHash")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CreatePastDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetPastDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -69,7 +71,7 @@ namespace PasteBinApi.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]//Ok
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Create([FromForm] CreatePastDto createPastModel)
+        public async Task<ActionResult> Create([FromForm] CreatePasteDto createPastModel)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -82,32 +84,32 @@ namespace PasteBinApi.Controllers
 
                 await _pastRepositories.CreatePost(createPaste);
             }
-            catch (Exception ex)
+            catch
             {
-                return BadRequest("При создание что-то полшло не так");
+                return BadRequest("При создание что-то пошло не так");
             }
 
             return NoContent();
-            
+
         }
         [HttpDelete]
-        [Route("{id:int}", Name = "Delete")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]//BadRequest - документация ошибок
-        [ProducesResponseType(StatusCodes.Status204NoContent)]//NoContent
-        [ProducesResponseType(StatusCodes.Status404NotFound)]//NotFound
+        [Route("{id:int}/Delete", Name = "Delete")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> DeletePost(int Id)
+        public async Task<ActionResult> DeletePost(int id)
         {
-            if (!_pastRepositories.PastExists(Id))
+            if (!_pastRepositories.PastExists(id))
                 return NotFound();
 
-            var pastDelete = await _pastRepositories.GetPastById(Id);
+            var pastDelete = await _pastRepositories.GetPastById(id);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (! _pastRepositories.Delete(pastDelete))
-                ModelState.AddModelError("", "Что-то пошло не так при удалении поста");
+            if (!_pastRepositories.Delete(pastDelete))
+                return BadRequest("Что-то пошло не так при удалении поста");
 
             return NoContent();
         }
@@ -117,7 +119,8 @@ namespace PasteBinApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult PasteUpdate(int id, [FromBody] UpdatePastDto update)
+        public ActionResult PasteUpdate(int id,
+          [FromBody] UpdatePasteDto update)
         {
             if (id == null || id <= 0)
                 return BadRequest();
@@ -125,19 +128,18 @@ namespace PasteBinApi.Controllers
             if (!_pastRepositories.PastExists(id))
                 return NotFound();
 
-            var paste = _pastRepositories.GetPastById(id);
-            //try
-            //{
-               var updatePaste = _mapper.Map<Past>(update);
+            var paste = _pastRepositories.GetPastById(id).Result;
 
-               if (_pastRepositories.UpdatePast(updatePaste))
-                    ModelState.AddModelError("", "Что-то пошло не так при обновлении поста");
-           // }
-            //catch
-            //{
-             //   return BadRequest("Что-то пошло не так при обновление поста ");
-            //}
+            paste.Title = update.Title;
+            paste.HashUrl = _hashService.ToHash();
+            paste.DateDelete = _timeCalculation.GetTimeToDelete(update.DateSave);
+
+            if (_pastRepositories.UpdatePast(paste))
+                return BadRequest("Что-то пошло не так при обновлении поста");
+
             return NoContent();
         }
+
+
     }
 }

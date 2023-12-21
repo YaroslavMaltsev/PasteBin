@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PasteBinApi.Dto
+namespace PasteBinApi.DTOs
 {
     public class GetPastDto
     {
@@ -11,5 +11,6 @@ namespace PasteBinApi.Dto
         [DataType(DataType.Date)]
         public DateTime DateDelete { get; set; }
         public string HashUrl { get; set; }
+        public string file { get; set; }
     }
 }

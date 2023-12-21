@@ -5,18 +5,17 @@ using PasteBinApi.Interface;
 
 namespace PasteBinApi.Helpers.AutoMapper.Paste.CreateMethods
 {
-    public class FileResolver : IValueResolver<CreatePasteDto, Past, string>
+    public class UploadFileResolver : IValueResolver<CreatePasteDto, Past, string>
     {
-        private readonly IManageFile _manage;
+        private readonly IManageFile _manageFile;
 
-        public FileResolver(IManageFile manage)
+        public UploadFileResolver(IManageFile manageFile)
         {
-            _manage = manage;
+            _manageFile = manageFile;
         }
         public string Resolve(CreatePasteDto source, Past destination, string destMember, ResolutionContext context)
         {
-            var fileName = _manage.UploadFileAsync(source.formFile).Result;
-            return fileName;
+            return _manageFile.UploadFileAsync(source.formFile).Result;
         }
     }
 }

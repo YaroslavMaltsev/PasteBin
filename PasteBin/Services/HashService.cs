@@ -7,7 +7,7 @@ namespace PasteBinApi.Service
     {
         public string ToHash()
         {
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes(DateTime.Now.Ticks.ToString()));
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes((DateTime.Now.Microsecond * DateTime.Now.Millisecond << DateTime.Now.Nanosecond).ToString()));
         }
     }
 }

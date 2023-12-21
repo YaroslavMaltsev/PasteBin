@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using PasteBin.Model;
+using PasteBinApi.DTOs;
 using PasteBinApi.Interface;
-using PasteBinApi.ResourceModel;
 
 namespace PasteBinApi.Helpers.AutoMapper.Paste.CreateMethods
 {
-    public class TimeCalculatorResolver : IValueResolver<CreatePastDto, Past, DateTime>
+    public class TimeCalculatorResolver : IValueResolver<CreatePasteDto, Past, DateTime>
     {
         private readonly ITimeCalculationService _time;
 
@@ -14,7 +14,7 @@ namespace PasteBinApi.Helpers.AutoMapper.Paste.CreateMethods
             _time = time;
         }
 
-        public DateTime Resolve(CreatePastDto source, Past destination, DateTime destMember, ResolutionContext context)
+        public DateTime Resolve(CreatePasteDto source, Past destination, DateTime destMember, ResolutionContext context)
         {
             var timeToDelete = _time.GetTimeToDelete(source.DateSave);
 

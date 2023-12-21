@@ -1,4 +1,4 @@
-﻿namespace PasteBinApi.Enum
+﻿namespace PasteBinApi.Data.Enum
 {
     public class UserRoles
     {

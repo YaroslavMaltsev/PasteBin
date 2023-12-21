@@ -6,7 +6,7 @@ namespace PasteBinApi.Interface
     {
         public Task<Past> GetPostByHash(string hash);
         public Task<bool> CreatePost(Past past);
-        Task <bool> Save();
+        Task<bool> Save();
         bool Delete(Past past);
         bool PastExists(int Id);
         public Task<Past> GetPastById(int Id);

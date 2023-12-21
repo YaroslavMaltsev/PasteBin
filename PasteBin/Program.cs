@@ -13,9 +13,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddTransient<IManageFile, ManageFile>();
+builder.Services.AddScoped<IManageFile, ManageFile>();
+builder.Services.AddScoped<IFileRepositories, FileRepositories>();
 builder.Services.AddTransient<IHashService, HashService>();
-builder.Services.AddTransient<ITimeCalculationService,TimeCalculationService>();
+builder.Services.AddTransient<ITimeCalculationService, TimeCalculationService>();
 builder.Services.AddScoped<IPastRepositiries, PastRepositories>();// подключение сервисов
 builder.Services.AddDbContext<ApplicationDbContext>(option =>
 

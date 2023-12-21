@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using PasteBin.Model;
+using PasteBinApi.DTOs;
 using PasteBinApi.Interface;
-using PasteBinApi.ResourceModel;
 
 namespace PasteBinApi.Helpers.AutoMapper.Paste.CreateMethods
 {
-    public class HashUriResolver : IValueResolver<CreatePastDto, Past, string>
+    public class HashUriResolver : IValueResolver<CreatePasteDto, Past, string>
     {
         private readonly IHashService _hashService;
 
@@ -13,7 +13,7 @@ namespace PasteBinApi.Helpers.AutoMapper.Paste.CreateMethods
         {
             _hashService = hashService;
         }
-        public string Resolve(CreatePastDto source, Past destination, string destMember, ResolutionContext context)
+        public string Resolve(CreatePasteDto source, Past destination, string destMember, ResolutionContext context)
         {
             var hashResult = _hashService.ToHash();
             return hashResult;
