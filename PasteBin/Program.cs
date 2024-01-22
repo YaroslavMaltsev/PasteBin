@@ -1,9 +1,9 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using PasteBin.Data;
-using PasteBinApi.Interface;
-using PasteBinApi.Repositories;
-using PasteBinApi.Service;
-using PasteBinApi.Services;
+using Microsoft.IdentityModel.Tokens;
+using PasteBin.DAL.Data;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,17 +13,56 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IManageFile, ManageFile>();
-builder.Services.AddScoped<IFileRepositories, FileRepositories>();
-builder.Services.AddTransient<IHashService, HashService>();
-builder.Services.AddTransient<ITimeCalculationService, TimeCalculationService>();
-builder.Services.AddScoped<IPastRepositiries, PastRepositories>();// подключение сервисов
+
+// Add DB
 builder.Services.AddDbContext<ApplicationDbContext>(option =>
 
 option.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString"))
+);
 
-);// подключение к базе данных
+// Add Identity
+builder.Services
+    .AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
+// Config Identity
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequiredLength = 2; // password length
+    options.Password.RequireDigit = true; // numbers required
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.SignIn.RequireConfirmedEmail = false;
+});
+
+// Add Authentication and JwtBear
+builder.Services
+    .AddAuthentication(options =>
+    {
+        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.SaveToken = true;
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidIssuer = builder.Configuration["JwtConfig:ValidIssuer"],
+            ValidAudience = builder.Configuration["JwtConfig:ValidAudience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtConfig:Secret"]))
+
+        };
+    });
+
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 var app = builder.Build();
 
 
