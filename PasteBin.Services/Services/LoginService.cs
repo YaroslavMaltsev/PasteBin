@@ -2,10 +2,11 @@
 using PasteBin.Domain.DTOs;
 using PasteBin.Domain.Interfaces;
 using PasteBin.Services.Builder;
+using PasteBin.Services.Interfaces;
 
 namespace PasteBin.Services.Services
 {
-    public class LoginService
+    public class LoginService : ILoginService
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly TokenCreateService _tokenCreate;
@@ -33,14 +34,14 @@ namespace PasteBin.Services.Services
 
                 var passwordCorrect = await _userManager.CheckPasswordAsync(user, loginDto.Password);
 
-                if(!passwordCorrect)
+                if (!passwordCorrect)
                 {
                     response.StatusCode = 400;
                     response.Description = "An error occurred during authorization, please check your details and try again later";
                     return response;
                 }
                 var userRole = await _userManager.GetRolesAsync(user);
-                if(userRole == null) 
+                if (userRole == null)
                 {
                     response.StatusCode = 404;
                     response.Description = "Error Login";
@@ -52,7 +53,7 @@ namespace PasteBin.Services.Services
                 response.Data = token;
                 return response;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response.StatusCode = 500;
                 response.Description = "Server error";
