@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using PasteBin.Domain.Interfaces;
+using PasteBin.Domain.Model;
 using PasteBin.Domain.Model.RoleUsers;
 using PasteBin.Services.Builder;
 using PasteBin.Services.Interfaces;
@@ -9,7 +10,7 @@ namespace PasteBin.Services.Services
     public class RoleService : IRoleService
     {
         private readonly RoleManager<IdentityRole> _roleManager;
-        public RoleService(UserManager<IdentityUser> userManager,
+        public RoleService(UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
             IConfiguration configuration)
         {

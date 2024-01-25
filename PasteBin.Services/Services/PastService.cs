@@ -26,11 +26,13 @@ namespace PasteBin.Services.Services
             _hashService = hashService;
             _mapper = mapper;
         }
-        public async Task<IBaseResponse<bool>> CreatePosteService(CreatePasteDto pastCreate)
+        public async Task<IBaseResponse<bool>> CreatePosteService(CreatePasteDto pastCreate, string userId)
         {
+
             var response = BaseResponseBuilder<bool>.GetBaseResponse();
             try
             {
+
                 if (pastCreate == null)
                 {
                     response.Description = "BeadRequest";
@@ -43,7 +45,8 @@ namespace PasteBin.Services.Services
                     DateCreate = DateTime.Now,
                     DateDelete = _timeCalculation.GetTimeToDelete(pastCreate.DateSave),
                     HashUrl = _hashService.ToHash(),
-                    URL = "string"
+                    URL = "string",
+                    UserId = userId
                 };
                 var responseToSave = await _pastRepositories.CreatePost(past);
 
@@ -69,7 +72,7 @@ namespace PasteBin.Services.Services
             }
         }
 
-        public async Task<IBaseResponse<bool>> DeletePostService(int id)
+        public async Task<IBaseResponse<bool>> DeletePostService(int id, string userId)
         {
             var response = BaseResponseBuilder<bool>.GetBaseResponse();
 
@@ -81,7 +84,7 @@ namespace PasteBin.Services.Services
                     response.StatusCode = 400;
                     return response;
                 }
-                var past = await _pastRepositories.GetPastById(id);
+                var past = await _pastRepositories.GetPastById(id,userId);
 
                 if (past == null)
                 {
@@ -111,14 +114,14 @@ namespace PasteBin.Services.Services
             }
         }
 
-        public async Task<IBaseResponse<IEnumerable<GetPastDto>>> GetPostAllService()
+        public async Task<IBaseResponse<IEnumerable<GetPastDto>>> GetPostAllService(string userId)
         {
             var response = BaseResponseBuilder<GetPastDto>.GetBaseResponseAll();
 
             try
             {
                 
-                var pastDto = _mapper.Map<IEnumerable<GetPastDto>>(await _pastRepositories.GetPastAll());
+                var pastDto = _mapper.Map<IEnumerable<GetPastDto>>(await _pastRepositories.GetPastAll(userId));
                 if(pastDto == null)
                 {
                     response.StatusCode = 404;
@@ -180,7 +183,7 @@ namespace PasteBin.Services.Services
             }
         }
 
-        public async Task<IBaseResponse<GetPastDto>> GetPostByIdService(int id)
+        public async Task<IBaseResponse<GetPastDto>> GetPostByIdService(int id, string userId)
         {
             var response = BaseResponseBuilder<GetPastDto>.GetBaseResponse();
             try
@@ -192,7 +195,7 @@ namespace PasteBin.Services.Services
                     return response;
                 }
 
-                var past = await _pastRepositories.GetPastById(id);
+                var past = await _pastRepositories.GetPastById(id, userId);
 
                 if (past == null)
                 {
@@ -221,7 +224,7 @@ namespace PasteBin.Services.Services
             }
         }
 
-        public async Task<IBaseResponse<bool>> UpdatePostService(UpdatePasteDto updatePast, int id)
+        public async Task<IBaseResponse<bool>> UpdatePostService(UpdatePasteDto updatePast, int id, string userId)
         {
            var response = BaseResponseBuilder<bool>.GetBaseResponse();
             try
@@ -233,7 +236,7 @@ namespace PasteBin.Services.Services
                     return response;
                 }
 
-                var past = await _pastRepositories.GetPastById(id);
+                var past = await _pastRepositories.GetPastById(id,userId);
 
                 if (past == null)
                 {

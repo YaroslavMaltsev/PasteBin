@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using PasteBin.Domain.Interfaces;
+using PasteBin.Domain.Model;
 using PasteBin.Domain.Model.RoleUsers;
 using PasteBin.Services.Builder;
 using PasteBin.Services.Interfaces;
@@ -9,9 +10,9 @@ namespace PasteBin.Services.Services
 {
     public class RegisterService : IRegisterService
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
 
-        public RegisterService(UserManager<IdentityUser> userManager)
+        public RegisterService(UserManager<User> userManager)
         {
             _userManager = userManager;
         }
@@ -30,10 +31,12 @@ namespace PasteBin.Services.Services
                     return response;
                 }
 
-                var newUser = new IdentityUser()
+                var newUser = new User()
                 {
                     Email = registerDto.Email,
                     SecurityStamp = Guid.NewGuid().ToString(),
+                    UserName = registerDto.Email,
+                    Phone = "+787909932"
                 };
 
                 var createUserResult = await _userManager.CreateAsync(newUser, registerDto.Password);

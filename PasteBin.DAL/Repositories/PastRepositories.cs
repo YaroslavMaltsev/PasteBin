@@ -27,14 +27,16 @@ namespace PasteBinApi.DAL.Repositories
             return Save().Result;
         }
 
-        public async Task<Past> GetPastById(int Id)
+        public async Task<Past> GetPastById(int Id,string userId)
         {
-            return await _context.Pasts.Where(i => i.Id == Id).FirstOrDefaultAsync();
+            return await _context.Pasts.Where(i => i.Id == Id ).
+                Where(i => i.UserId == userId)
+                .FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Past>> GetPastAll()
+        public async Task<IEnumerable<Past>> GetPastAll(string userId)
         {
-            return await _context.Pasts.ToListAsync();
+            return await _context.Pasts.Where(i => i.UserId == userId).ToListAsync();
         }
 
         public async Task<Past> GetPostByHash(string hash)

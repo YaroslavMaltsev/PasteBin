@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using PasteBin.Domain.DTOs;
 using PasteBin.Domain.Interfaces;
+using PasteBin.Domain.Model;
 using PasteBin.Services.Builder;
 using PasteBin.Services.Interfaces;
 
@@ -8,22 +9,24 @@ namespace PasteBin.Services.Services
 {
     public class LoginService : ILoginService
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly TokenCreateService _tokenCreate;
+        private readonly UserManager<User> _userManager;
+        private readonly ITokenCreateService _tokenCreateService;
 
-        public LoginService(UserManager<IdentityUser> userManager,
-            TokenCreateService tokenCreate)
+        public LoginService(UserManager<User> userManager,
+         ITokenCreateService tokenCreateService
+            )
         {
             _userManager = userManager;
-            _tokenCreate = tokenCreate;
+            _tokenCreateService = tokenCreateService;
         }
 
         public async Task<IBaseResponse<string>> Login(LoginDto loginDto)
         {
             var response = BaseResponseBuilder<string>.GetBaseResponse();
+
             try
             {
-                var user = await _userManager.FindByEmailAsync(loginDto.Email);
+                var user = await _userManager.FindByNameAsync(loginDto.Email);
 
                 if (user == null)
                 {
@@ -47,7 +50,7 @@ namespace PasteBin.Services.Services
                     response.Description = "Error Login";
                     return response;
                 }
-                var token = _tokenCreate.TokenCreate(user, userRole);
+                var token = _tokenCreateService.TokenCreate(user, userRole);
 
                 response.StatusCode = 200;
                 response.Data = token;

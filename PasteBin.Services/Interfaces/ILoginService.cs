@@ -1,4 +1,5 @@
-﻿using PasteBin.Domain.DTOs;
+﻿using Microsoft.AspNetCore.Identity;
+using PasteBin.Domain.DTOs;
 using PasteBin.Domain.Interfaces;
 
 namespace PasteBin.Services.Interfaces

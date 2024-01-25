@@ -11,6 +11,7 @@ namespace PasteBinApi.Controllers
     {
         private readonly IRegisterService _registerService;
         private readonly ILoginService _loginService;
+   
 
         public AuthController(IRegisterService registerService,
             ILoginService loginService)
@@ -20,7 +21,7 @@ namespace PasteBinApi.Controllers
         }
 
         [HttpPost]
-        [Route("Register")]
+        [Route("Register/")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -65,5 +66,6 @@ namespace PasteBinApi.Controllers
             return Ok(responseLogin);
 
         }
+       
     }
 }

@@ -2,15 +2,22 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using PasteBin.DAL.Data;
+using PasteBin.Domain.Model;
+using PasteBin.Services.Interfaces;
+using PasteBin.Services.Services;
+using PasteBinApi.DAL.Interface;
+using PasteBinApi.DAL.Repositories;
+using PasteBinApi.Services.Interface;
+using PasteBinApi.Services.Service;
+using PasteBinApi.Services.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -22,15 +29,15 @@ option.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString"
 
 // Add Identity
 builder.Services
-    .AddIdentity<IdentityUser, IdentityRole>()
+    .AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
 // Config Identity
 builder.Services.Configure<IdentityOptions>(options =>
 {
-    options.Password.RequiredLength = 2; // password length
-    options.Password.RequireDigit = true; // numbers required
+    options.Password.RequiredLength = 5; // password length
+    options.Password.RequireDigit = false; // numbers required
     options.Password.RequireLowercase = false;
     options.Password.RequireUppercase = false;
     options.Password.RequireNonAlphanumeric = false;
@@ -53,15 +60,26 @@ builder.Services
         {
             ValidateIssuer = true,
             ValidateAudience = true,
-            ValidIssuer = builder.Configuration["JwtConfig:ValidIssuer"],
-            ValidAudience = builder.Configuration["JwtConfig:ValidAudience"],
+            ValidIssuer =  builder.Configuration["JwtConfig:ValidIssuer"],
+            ValidAudience =builder.Configuration["JwtConfig:ValidAudience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtConfig:Secret"]))
 
         };
     });
+builder.Services.AddScoped<UserManager<User>>();
+builder.Services.AddScoped<IPastRepositories, PastRepositories>();
+builder.Services.AddScoped<IHashService, HashService>();
+builder.Services.AddScoped<IPasteService, PastService>();
+builder.Services.AddScoped<IRegisterService, RegisterService>();
+builder.Services.AddSingleton<ITimeCalculationService, TimeCalculationService>();
+builder.Services.AddScoped<IUpdateUserRoleService, UpdateUserRoleService>();
+builder.Services.AddTransient<IRoleService, RoleService>();
+builder.Services.AddScoped<ITokenCreateService, TokenCreateService>();
+builder.Services.AddScoped<ILoginService, LoginService>();
 
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
 var app = builder.Build();
 

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using PasteBin.Domain.DTOs;
 using PasteBin.Domain.Interfaces;
+using PasteBin.Domain.Model;
 using PasteBin.Domain.Model.RoleUsers;
 using PasteBin.Services.Builder;
 
@@ -9,9 +10,9 @@ namespace PasteBin.Services.Services
 {
     public class UpdateUserRoleService : IUpdateUserRoleService
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
 
-        public UpdateUserRoleService(UserManager<IdentityUser> userManager)
+        public UpdateUserRoleService(UserManager<User> userManager)
         {
             _userManager = userManager;
         }

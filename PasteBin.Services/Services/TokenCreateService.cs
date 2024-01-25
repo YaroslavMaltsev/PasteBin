@@ -1,15 +1,14 @@
-﻿
-
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using PasteBin.Services.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
 namespace PasteBin.Services.Services
 {
-    public class TokenCreateService
+    public class TokenCreateService : ITokenCreateService
     {
         private readonly IConfiguration _configuration;
 
@@ -20,21 +19,22 @@ namespace PasteBin.Services.Services
 
         public string TokenCreate(IdentityUser user, IList<string> identityRoles)
         {
-            string token = TokenCreateImplementation(user,identityRoles);
+            string token = TokenCreateImplementation(user, identityRoles);
 
-            return token; 
+            return token;
         }
 
-        private string TokenCreateImplementation(IdentityUser user, IList<string> identityRoles)
+       private string TokenCreateImplementation(IdentityUser user, IList<string> identityRoles)
         {
             var authClaim = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim("UserId", user.Id ),
+               // new Claim("Email", user.Email),
                 new Claim("JWTID", Guid.NewGuid().ToString())
             };
 
-            foreach(var role in identityRoles)
+            foreach (var role in identityRoles)
             {
                 authClaim.Add(new Claim(ClaimTypes.Role, role));
             }

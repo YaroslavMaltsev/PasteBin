@@ -8,8 +8,8 @@ namespace PasteBinApi.DAL.Interface
         public Task<bool> CreatePost(Past past);
         Task<bool> Save();
         bool Delete(Past past);
-        public Task<Past> GetPastById(int Id);
+        public Task<Past> GetPastById(int Id, string userId);
         public bool UpdatePast(Past past);
-        public Task<IEnumerable<Past>> GetPastAll();
+        public Task<IEnumerable<Past>> GetPastAll(string userId);
     }
 }

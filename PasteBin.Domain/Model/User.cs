@@ -7,6 +7,5 @@ namespace PasteBin.Domain.Model
     {
         public string Phone { get; set; }
         public string Email { get; set; }
-        public ICollection<Past> Pasts { get; set; }
     }
 }
