@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using PasteBin.Domain.Interfaces;
 using PasteBin.Domain.Model;
 using PasteBin.Services.Builder;
@@ -6,6 +7,7 @@ using PasteBin.Services.Interfaces;
 using PasteBinApi.DAL.Interface;
 using PasteBinApi.Domain.DTOs;
 using PasteBinApi.Services.Interface;
+using System.Security.Claims;
 
 namespace PasteBin.Services.Services
 {
@@ -19,7 +21,8 @@ namespace PasteBin.Services.Services
         public PastService(IPastRepositories pastRepositories,
             ITimeCalculationService timeCalculation,
             IHashService hashService,
-            IMapper mapper)
+            IMapper mapper,
+            UserManager<User> userManager)
         {
             _pastRepositories = pastRepositories;
             _timeCalculation = timeCalculation;
@@ -30,9 +33,8 @@ namespace PasteBin.Services.Services
         {
 
             var response = BaseResponseBuilder<bool>.GetBaseResponse();
-            try
-            {
-
+            //try
+            //{
                 if (pastCreate == null)
                 {
                     response.Description = "BeadRequest";
@@ -63,13 +65,13 @@ namespace PasteBin.Services.Services
                 response.Data = responseToSave;
 
                 return response;
-             }
-            catch (Exception ex)
-            {
-                response.Description = "Server error";
-                response.StatusCode = 500;
-                return response;
-            }
+             //}
+            //catch (Exception ex)
+            //{
+            //    response.Description = "Server error";
+            //    response.StatusCode = 500;
+            //    return response;
+            //}
         }
 
         public async Task<IBaseResponse<bool>> DeletePostService(int id, string userId)

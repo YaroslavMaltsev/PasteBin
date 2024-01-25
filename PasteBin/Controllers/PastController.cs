@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PasteBin.Domain.Model.RoleUsers;
 using PasteBin.Services.Interfaces;
 using PasteBinApi.Domain.DTOs;
+using System.Security.Claims;
 
 namespace PasteBinApi.Controllers
 {
@@ -28,9 +30,8 @@ namespace PasteBinApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> GetPastById(int id)
         {
-            string userid = HttpContext.User.FindFirst("UserId").ToString();
 
-            var responsePaste = await _pasteService.GetPostByIdService(id,userid);
+            var responsePaste = await _pasteService.GetPostByIdService(id,GetUserId());
 
             if (responsePaste.StatusCode == 404)
                 return BadRequest(responsePaste.Description);
@@ -77,9 +78,8 @@ namespace PasteBinApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            string userid = HttpContext.User.FindFirst("UserId").ToString();
 
-            var responseCreatePaste = await _pasteService.CreatePosteService(createPastDto,userid);
+            var responseCreatePaste = await _pasteService.CreatePosteService(createPastDto,GetUserId());
 
             if (responseCreatePaste.StatusCode == 400)
                 return BadRequest(responseCreatePaste.Description);
@@ -99,7 +99,7 @@ namespace PasteBinApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> DeletePost(int id)
         {
-            string userid = HttpContext.User.FindFirst("UserId").ToString();
+            string userid = HttpContext.User.FindFirst("").ToString();
 
             var responsePosteDelete = await _pasteService.DeletePostService(id,userid);
 
@@ -126,9 +126,8 @@ namespace PasteBinApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            string userid = HttpContext.User.FindFirst("UserId").ToString();
 
-            var responseUpdatePaste = await _pasteService.UpdatePostService(update, id,userid);
+            var responseUpdatePaste = await _pasteService.UpdatePostService(update, id, GetUserId());
 
             if (responseUpdatePaste.StatusCode == 400)
                 return BadRequest(responseUpdatePaste.Description);
@@ -141,6 +140,11 @@ namespace PasteBinApi.Controllers
 
             return Ok(responseUpdatePaste);
 
+        }
+        protected string GetUserId()
+        {
+            string user = this.User.Claims.First(i => i.Type == "UserId").Value;
+            return user;
         }
     }
 }
