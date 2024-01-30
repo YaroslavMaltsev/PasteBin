@@ -11,6 +11,11 @@ namespace PasteBinApi.Domain.DTOs
         [NotMapped]
         [Required]
         public string Password { get; set; }
+        
+        [Required]
+        [Compare(nameof(Password), ErrorMessage = "Password mismatch")]
+        [DataType(DataType.Password)]   
+        public string PasswordConfirm { get; set; }
 
     }
 }

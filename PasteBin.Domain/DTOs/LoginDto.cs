@@ -11,5 +11,6 @@ namespace PasteBin.Domain.DTOs
 
         [Required]
         public string Password { get; set; }
+        
     }
 }

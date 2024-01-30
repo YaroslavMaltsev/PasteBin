@@ -28,10 +28,9 @@ namespace PasteBin.Services.Services
         {
             var authClaim = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim("UserId", user.Id ),
-               // new Claim("Email", user.Email),
-                new Claim("JWTID", Guid.NewGuid().ToString())
+                new(ClaimTypes.Name, user.UserName),
+                new("UserId", user.Id ),
+                new("JWTID", Guid.NewGuid().ToString())
             };
 
             foreach (var role in identityRoles)

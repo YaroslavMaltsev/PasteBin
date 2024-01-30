@@ -45,28 +45,6 @@ namespace PasteBinApi.Controllers
             return Ok(responsePaste);
         }
 
-        [HttpGet]
-        [Route("{hash}", Name = "GetPastByHash")]
-        [Authorize(Roles = StaticRoleUsers.USER)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> GetPostByHash(string hash)
-        {
-            var responsePaste = await _pasteService.GetPostByHashService(hash);
-
-            if (responsePaste.StatusCode == 400)
-                return BadRequest(responsePaste.Description);
-
-            if (responsePaste.StatusCode == 404)
-                return NotFound(responsePaste.Description);
-
-            if (responsePaste.StatusCode == 500)
-                return Problem(responsePaste.Description);
-
-            return Ok(responsePaste);
-        }
 
         [HttpPost]
         [Route("Create")]

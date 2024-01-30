@@ -58,5 +58,11 @@ namespace PasteBinApi.DAL.Repositories
 
             return Save().Result;
         }
+        public async Task<bool> AddAView(Past past)
+        {
+            var updateViewResponse = _context.Pasts.Update(past);
+
+            return await Save();
+        }
     }
 }

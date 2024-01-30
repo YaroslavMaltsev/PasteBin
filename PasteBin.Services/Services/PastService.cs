@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using PasteBin.Domain.Interfaces;
 using PasteBin.Domain.Model;
 using PasteBin.Services.Builder;
@@ -7,7 +6,6 @@ using PasteBin.Services.Interfaces;
 using PasteBinApi.DAL.Interface;
 using PasteBinApi.Domain.DTOs;
 using PasteBinApi.Services.Interface;
-using System.Security.Claims;
 
 namespace PasteBin.Services.Services
 {
@@ -17,39 +15,53 @@ namespace PasteBin.Services.Services
         private readonly ITimeCalculationService _timeCalculation;
         private readonly IHashService _hashService;
         private readonly IMapper _mapper;
+        private readonly IStorageS3Service _storageS3Service;
 
         public PastService(IPastRepositories pastRepositories,
             ITimeCalculationService timeCalculation,
             IHashService hashService,
             IMapper mapper,
-            UserManager<User> userManager)
+            IStorageS3Service storageS3Service)
         {
             _pastRepositories = pastRepositories;
             _timeCalculation = timeCalculation;
             _hashService = hashService;
             _mapper = mapper;
+            _storageS3Service = storageS3Service;
         }
         public async Task<IBaseResponse<bool>> CreatePosteService(CreatePasteDto pastCreate, string userId)
         {
 
             var response = BaseResponseBuilder<bool>.GetBaseResponse();
-            //try
-            //{
+            var key = Guid.NewGuid().ToString();
+            try
+            {
                 if (pastCreate == null)
                 {
                     response.Description = "BeadRequest";
                     response.StatusCode = 400;
                     return response;
                 }
+
+                var responseStorageS3Service = await _storageS3Service.UploadTextToStorage(key, pastCreate.Text);
+
+                if (!responseStorageS3Service)
+                {
+                    response.Description = "S3 Service Error";
+                    response.StatusCode = 500;
+                    return response;
+                }
+
                 var past = new Past()
                 {
                     Title = pastCreate.Title,
                     DateCreate = DateTime.Now,
                     DateDelete = _timeCalculation.GetTimeToDelete(pastCreate.DateSave),
                     HashUrl = _hashService.ToHash(),
-                    URL = "string",
+                    Key = key,
                     UserId = userId
                 };
+
                 var responseToSave = await _pastRepositories.CreatePost(past);
 
                 if (responseToSave == false)
@@ -65,13 +77,13 @@ namespace PasteBin.Services.Services
                 response.Data = responseToSave;
 
                 return response;
-             //}
-            //catch (Exception ex)
-            //{
-            //    response.Description = "Server error";
-            //    response.StatusCode = 500;
-            //    return response;
-            //}
+            }
+            catch (Exception ex)
+            {
+                response.Description = "Server error";
+                response.StatusCode = 500;
+                return response;
+            }
         }
 
         public async Task<IBaseResponse<bool>> DeletePostService(int id, string userId)
@@ -86,7 +98,7 @@ namespace PasteBin.Services.Services
                     response.StatusCode = 400;
                     return response;
                 }
-                var past = await _pastRepositories.GetPastById(id,userId);
+                var past = await _pastRepositories.GetPastById(id, userId);
 
                 if (past == null)
                 {
@@ -108,7 +120,7 @@ namespace PasteBin.Services.Services
                 response.Data = responseToDelete;
                 return response;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response.StatusCode = 500;
                 response.Description = "Server error";
@@ -122,15 +134,15 @@ namespace PasteBin.Services.Services
 
             try
             {
-                
+
                 var pastDto = _mapper.Map<IEnumerable<GetPastDto>>(await _pastRepositories.GetPastAll(userId));
-                if(pastDto == null)
+                if (pastDto == null)
                 {
                     response.StatusCode = 404;
                     response.Description = "NotFound";
                     return response;
                 }
-               
+
                 response.StatusCode = 200;
                 response.Description = "Posts";
                 response.Data = pastDto;
@@ -158,12 +170,14 @@ namespace PasteBin.Services.Services
 
                 var past = await _pastRepositories.GetPostByHash(hash);
 
+
                 if (past == null)
                 {
                     response.StatusCode = 404;
                     response.Description = "NotFound";
                     return response;
                 }
+                past.Views += 1;
 
                 var pastResponse = new GetPastDto
                 {
@@ -171,13 +185,24 @@ namespace PasteBin.Services.Services
                     Title = past.Title,
                     DateDelete = past.DateDelete,
                     DateCreate = past.DateCreate,
+                    Views = past.Views,
+                    HashUrl = past.HashUrl,
+                    Text = past.Title
                 };
+
+                var responseUpdateViews = _pastRepositories.UpdatePast(past);
+                if (!responseUpdateViews)
+                {
+                    response.StatusCode = 500;
+                    response.Description = "Server error";
+                    return response;
+                }
                 response.StatusCode = 200;
                 response.Description = "Post found";
                 response.Data = pastResponse;
                 return response;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response.StatusCode = 500;
                 response.Description = "Server error";
@@ -228,7 +253,7 @@ namespace PasteBin.Services.Services
 
         public async Task<IBaseResponse<bool>> UpdatePostService(UpdatePasteDto updatePast, int id, string userId)
         {
-           var response = BaseResponseBuilder<bool>.GetBaseResponse();
+            var response = BaseResponseBuilder<bool>.GetBaseResponse();
             try
             {
                 if (updatePast == null && id <= 0)
@@ -238,7 +263,7 @@ namespace PasteBin.Services.Services
                     return response;
                 }
 
-                var past = await _pastRepositories.GetPastById(id,userId);
+                var past = await _pastRepositories.GetPastById(id, userId);
 
                 if (past == null)
                 {
@@ -264,12 +289,12 @@ namespace PasteBin.Services.Services
                 response.Data = updateResolver;
                 return response;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response.StatusCode = 500;
                 response.Description = "Service error";
                 return response;
             }
         }
-    } 
+    }
 }

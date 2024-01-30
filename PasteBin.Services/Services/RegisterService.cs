@@ -36,7 +36,6 @@ namespace PasteBin.Services.Services
                     Email = registerDto.Email,
                     SecurityStamp = Guid.NewGuid().ToString(),
                     UserName = registerDto.Email,
-                    Phone = "+787909932"
                 };
 
                 var createUserResult = await _userManager.CreateAsync(newUser, registerDto.Password);
