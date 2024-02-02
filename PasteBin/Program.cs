@@ -75,6 +75,7 @@ builder.Services.AddScoped<IUpdateUserRoleService, UpdateUserRoleService>();
 builder.Services.AddTransient<IRoleService, RoleService>();
 builder.Services.AddScoped<ITokenCreateService, TokenCreateService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IStorageS3Service, StorageS3Service>();
 
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

@@ -10,7 +10,7 @@ namespace PasteBinApi.Controllers
 {
     [ApiController]
     [Route("PasteBin/[controller]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+   // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AdminPanelController : ControllerBase
     {
         private readonly IUpdateUserRoleService _updateUserRoleService;
@@ -48,7 +48,7 @@ namespace PasteBinApi.Controllers
         }
         [HttpPost]
         [Route("seed-roles")]
-        [Authorize(Roles = StaticRoleUsers.ADMIN)]
+      //  [Authorize(Roles = StaticRoleUsers.ADMIN)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> SeedRoles()

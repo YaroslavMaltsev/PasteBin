@@ -9,7 +9,6 @@ namespace PasteBin.Services.Services
     public class StorageS3Service : IStorageS3Service
     {
         private readonly IConfiguration _configuration;
-
         public StorageS3Service(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -20,29 +19,48 @@ namespace PasteBin.Services.Services
 
             var request = new PutObjectRequest
             {
-                BucketName = "string", //TODO: Add a new bucket
-                Key = key,
+                BucketName = "pastebintestproject",
+                Key = $"{key}.txt",
                 ContentBody = textPasteBin
             };
 
             var response = await client.PutObjectAsync(request);
 
+            client.Dispose();
+
+            switch (response.HttpStatusCode)
+            {
+                case  HttpStatusCode.OK:
+                    return true;
+                default:
+                    return false;
+                    
+            }
+        }
+        public async Task<string> GetTextPasteToS3(string key)
+        {
+            var client = CreateAmazonS3Client();
+
+            var response = await client.GetObjectAsync("pastebintestproject", $"{key}.txt");
+           
+            client.Dispose();
             if (response.HttpStatusCode == HttpStatusCode.OK)
-                return true;
-            else
-                return false;
+            {
+                using (var reader = new StreamReader(response.ResponseStream))
+                {
+                    string text = reader.ReadToEnd();
+                    return text;
+                }
+            }
+            return null;
         }
         private AmazonS3Client CreateAmazonS3Client()
         {
-            var credentials = new Amazon.Runtime.BasicAWSCredentials(_configuration["AccessKey"], _configuration["SecretKey"]);
             AmazonS3Config config = new AmazonS3Config
             {
-                ServiceURL = "https://message-queue.api.cloud.yandex.net",
-                AuthenticationRegion = "ru-central1",
-
-
+                ServiceURL = "https://s3.yandexcloud.net",
             };
-            return new AmazonS3Client(credentials, config);
+            return new AmazonS3Client(_configuration["AWS:AccessKey"], _configuration["AWS:SecretKey"],config);
         }
     }
 }

@@ -43,7 +43,7 @@ namespace PasteBin.Services.Services
                     return response;
                 }
 
-                var responseStorageS3Service = await _storageS3Service.UploadTextToStorage(key, pastCreate.Text);
+                var responseStorageS3Service = await _storageS3Service.UploadTextToStorage(pastCreate.Text, key);
 
                 if (!responseStorageS3Service)
                 {
@@ -134,8 +134,8 @@ namespace PasteBin.Services.Services
 
             try
             {
-
                 var pastDto = _mapper.Map<IEnumerable<GetPastDto>>(await _pastRepositories.GetPastAll(userId));
+
                 if (pastDto == null)
                 {
                     response.StatusCode = 404;
@@ -187,10 +187,11 @@ namespace PasteBin.Services.Services
                     DateCreate = past.DateCreate,
                     Views = past.Views,
                     HashUrl = past.HashUrl,
-                    Text = past.Title
+                    Text = await _storageS3Service.GetTextPasteToS3(past.Key)
                 };
 
                 var responseUpdateViews = _pastRepositories.UpdatePast(past);
+
                 if (!responseUpdateViews)
                 {
                     response.StatusCode = 500;
@@ -237,7 +238,10 @@ namespace PasteBin.Services.Services
                     Title = past.Title,
                     DateDelete = past.DateDelete,
                     DateCreate = past.DateCreate,
+                    HashUrl = past.HashUrl,
+                    Text = await _storageS3Service.GetTextPasteToS3(past.Key)
                 };
+
                 response.StatusCode = 200;
                 response.Description = "Post found";
                 response.Data = postResponse;
