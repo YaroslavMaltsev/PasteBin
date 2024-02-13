@@ -106,10 +106,11 @@ namespace PasteBin.Services.Services
                     response.StatusCode = 404;
                     return response;
                 }
-
+                var responseDeleteTextToS3 = await _storageS3Service.DeleteTextPasteToS3(past.Key);
+    
                 var responseToDelete = _pastRepositories.Delete(past);
 
-                if (responseToDelete == false)
+                if (!responseToDelete && !responseDeleteTextToS3)
                 {
                     response.StatusCode = 500;
                     response.Description = "Post don't Delete";

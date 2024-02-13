@@ -8,9 +8,9 @@ namespace PasteBin.DAL.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-
         }
         public DbSet<Past> Pasts { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        
     }
 }

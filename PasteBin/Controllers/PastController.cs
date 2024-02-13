@@ -23,7 +23,7 @@ namespace PasteBinApi.Controllers
 
         [HttpGet]
         [Route("{id:int}", Name = "GetPastById")]
-        [Authorize(Roles = StaticRoleUsers.USER)]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -48,7 +48,7 @@ namespace PasteBinApi.Controllers
 
         [HttpPost]
         [Route("Create")]
-        [Authorize(Roles = StaticRoleUsers.USER)]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -70,7 +70,7 @@ namespace PasteBinApi.Controllers
         }
         [HttpDelete]
         [Route("{id:int}", Name = "Delete")]
-        [Authorize(Roles = StaticRoleUsers.USER)]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -94,7 +94,7 @@ namespace PasteBinApi.Controllers
         }
         [HttpPut]
         [Route("{id:int}", Name = "UpdatePaste")]
-        [Authorize(Roles = StaticRoleUsers.USER)]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

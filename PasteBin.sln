@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasteBin.DAL", "PasteBin.DA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasteBin.Services", "PasteBin.Services\PasteBin.Services.csproj", "{14DA98A0-5B31-42BF-B510-B3327A7C97B0}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{EDB27EEA-68C5-4933-8EE4-862FEC67BD97}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{14DA98A0-5B31-42BF-B510-B3327A7C97B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14DA98A0-5B31-42BF-B510-B3327A7C97B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14DA98A0-5B31-42BF-B510-B3327A7C97B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDB27EEA-68C5-4933-8EE4-862FEC67BD97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDB27EEA-68C5-4933-8EE4-862FEC67BD97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDB27EEA-68C5-4933-8EE4-862FEC67BD97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDB27EEA-68C5-4933-8EE4-862FEC67BD97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -23,12 +23,12 @@ builder.Services.AddSwaggerGen();
 // Add DB
 builder.Services.AddDbContext<ApplicationDbContext>(option =>
 
-option.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString"))
+option.UseMySQL(builder.Configuration.GetConnectionString("ConnectionString"))
 );
 
 // Add Identity
 builder.Services
-    .AddIdentity<User, IdentityRole>()
+    .AddIdentity<User,IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 

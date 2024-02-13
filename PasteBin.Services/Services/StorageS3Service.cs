@@ -54,6 +54,30 @@ namespace PasteBin.Services.Services
             }
             return null;
         }
+        public async Task<bool> DeleteTextPasteToS3(string key)
+        {
+            var client = CreateAmazonS3Client();
+
+            var request = new DeleteObjectRequest
+            {
+                BucketName = "pastebintestproject",
+                Key = $"{key}.txt",
+            };
+
+            var response = await client.DeleteObjectAsync(request);
+
+            client.Dispose();
+
+            switch (response.HttpStatusCode)
+            {
+                case HttpStatusCode.OK:
+                    return true;
+                default:
+                    return false;
+
+            }
+
+        }
         private AmazonS3Client CreateAmazonS3Client()
         {
             AmazonS3Config config = new AmazonS3Config
