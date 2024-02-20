@@ -5,6 +5,6 @@ namespace PasteBin.Services.Interfaces
 {
     public interface IRegisterService
     {
-        Task<IBaseResponse<bool>> RegisterUser(RegisterDto registerDto);
+        Task<IBaseResponse<bool>> RegisterUserAsync(RegisterDto registerDto);
     }
 }

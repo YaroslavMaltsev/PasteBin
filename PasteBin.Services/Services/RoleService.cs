@@ -17,7 +17,7 @@ namespace PasteBin.Services.Services
             _roleManager = roleManager;
         }
 
-        public async Task<IBaseResponse<bool>> CreateRole()
+        public async Task<IBaseResponse<bool>> CreateRoleAsync()
         {
             var response = BaseResponseBuilder<bool>.GetBaseResponse();
             try

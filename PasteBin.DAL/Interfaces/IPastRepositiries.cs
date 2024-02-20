@@ -4,12 +4,11 @@ namespace PasteBinApi.DAL.Interface
 {
     public interface IPastRepositories
     {
-        public Task<Past> GetPostByHash(string hash);
-        public Task<bool> CreatePost(Past past);
-        Task<bool> Save();
-        bool Delete(Past past);
-        public Task<Past> GetPastById(int Id, string userId);
-        public bool UpdatePast(Past past);
-        public Task<IEnumerable<Past>> GetPastAll(string userId);
+        public Task<Past> GetPostByHashAsync(string hash);
+        public Task CreatePostAsync(Past past);
+        public void Delete(Past past);
+        public Task<Past> GetPastByIdAsync(int Id, string userId);
+        public void UpdatePast(Past past);
+        public Task<IEnumerable<Past>> GetPastAllAsync(string userId);
     }
 }

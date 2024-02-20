@@ -4,7 +4,7 @@ using PasteBin.Services.Interfaces;
 namespace PasteBinApi.Controllers
 {
     [ApiController]
-    [Route("PasteBin/[controller]")]
+    [Route("pastebin/[controller]")]
     public class GetPasteByHashController : ControllerBase
     {
         private readonly IPasteService _pasteService;
@@ -14,24 +14,15 @@ namespace PasteBinApi.Controllers
             _pasteService = pasteService;
         }
         [HttpGet]
-        [Route("{hash}", Name = "GetPastByHash")]
+        [Route("get-past-by-hash/{hash}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> GetPostByHash(string hash)
         {
-            var responsePaste = await _pasteService.GetPostByHashService(hash);
-
-            if (responsePaste.StatusCode == 400)
-                return BadRequest(responsePaste.Description);
-
-            if (responsePaste.StatusCode == 404)
-                return NotFound(responsePaste.Description);
-
-            if (responsePaste.StatusCode == 500)
-                return Problem(responsePaste.Description);
-
+            var responsePaste = await _pasteService.GetPostByHashServiceAsync(hash);
+        
             return Ok(responsePaste);
         }
     }

@@ -6,6 +6,6 @@ namespace PasteBin.Services.Interfaces
 {
     public interface ILoginService
     {
-        Task<IBaseResponse<string>> Login(LoginDto loginDto);
+        Task<IBaseResponse<string>> LoginAsync(LoginDto loginDto);
     }
 }

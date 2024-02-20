@@ -13,7 +13,7 @@ namespace PasteBin.Services.Services
         {
             _configuration = configuration;
         }
-        public async Task<bool> UploadTextToStorage(string textPasteBin, string key)
+        public async Task<bool> UploadTextToStorageAsync(string textPasteBin, string key)
         {
             var client = CreateAmazonS3Client();
 
@@ -37,7 +37,7 @@ namespace PasteBin.Services.Services
                     
             }
         }
-        public async Task<string> GetTextPasteToS3(string key)
+        public async Task<string> GetTextPasteToS3Async(string key)
         {
             var client = CreateAmazonS3Client();
 
@@ -52,7 +52,32 @@ namespace PasteBin.Services.Services
                     return text;
                 }
             }
+
             return null;
+        }
+        public async Task<bool> DeleteTextPasteToS3Async(string key)
+        {
+            var client = CreateAmazonS3Client();
+
+            var request = new DeleteObjectRequest
+            {
+                BucketName = "pastebintestproject",
+                Key = $"{key}.txt",
+            };
+
+            var response = await client.DeleteObjectAsync(request);
+
+            client.Dispose();
+
+            switch (response.HttpStatusCode)
+            {
+                case HttpStatusCode.OK:
+                    return true;
+                default:
+                    return false;
+
+            }
+
         }
         private AmazonS3Client CreateAmazonS3Client()
         {
@@ -60,6 +85,7 @@ namespace PasteBin.Services.Services
             {
                 ServiceURL = "https://s3.yandexcloud.net",
             };
+
             return new AmazonS3Client(_configuration["AWS:AccessKey"], _configuration["AWS:SecretKey"],config);
         }
     }

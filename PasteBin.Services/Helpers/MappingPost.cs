@@ -9,7 +9,7 @@ namespace PasteBin.Services.Helpers
     {
         public MappingPost() 
         {
-            CreateMap<Past, GetPastDto>();
+            CreateMap<Past, GetPastDto>().ReverseMap();
         }
     }
 }

@@ -13,56 +13,39 @@ namespace PasteBinApi.DAL.Repositories
         {
             _context = context;
         }
-        public async Task<bool> CreatePost(Past past)
+
+        public async Task CreatePostAsync(Past past)
         {
             await _context.AddAsync(past);
-
-            return await Save();
         }
 
-        public bool Delete(Past past)
+        public void Delete(Past past)
         {
-            var del = _context.Remove(past);
+             _context.Remove(past);
 
-            return Save().Result;
         }
 
-        public async Task<Past> GetPastById(int Id,string userId)
+        public async Task<Past> GetPastByIdAsync(int Id, string userId)
         {
-            return await _context.Pasts.Where(i => i.Id == Id ).
+            return await _context.Pasts.Where(i => i.Id == Id).
                 Where(i => i.UserId == userId)
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Past>> GetPastAll(string userId)
+        public async Task<IEnumerable<Past>> GetPastAllAsync(string userId)
         {
             return await _context.Pasts.Where(i => i.UserId == userId).ToListAsync();
         }
 
-        public async Task<Past> GetPostByHash(string hash)
+        public async Task<Past> GetPostByHashAsync(string hash)
         {
             return await _context.Pasts.Where(i => i.HashUrl == hash).FirstOrDefaultAsync();
         }
 
-        public async Task<bool> Save()
+        public void UpdatePast(Past past)
         {
-            var saved = await _context.SaveChangesAsync();
-
-            return saved != 0 ? true : false;
-
+            _context.Update(past);
         }
 
-        public bool UpdatePast(Past past)
-        {
-            var update = _context.Update(past);
-
-            return Save().Result;
-        }
-        public async Task<bool> AddAView(Past past)
-        {
-            var updateViewResponse = _context.Pasts.Update(past);
-
-            return await Save();
-        }
     }
 }

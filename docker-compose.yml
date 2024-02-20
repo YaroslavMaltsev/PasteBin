@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  pastebinapi:
+    image: ${DOCKER_REGISTRY-}pastebinapi
+    build:
+      context: .
+      dockerfile: PasteBin\Dockerfile

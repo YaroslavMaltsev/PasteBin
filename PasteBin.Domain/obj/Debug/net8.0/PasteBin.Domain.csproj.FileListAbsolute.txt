@@ -1,0 +1,13 @@
+C:\Users\malts\OneDrive\Рабочий стол\Pastebin\Pastebin\PasteBin.Domain\bin\Debug\net8.0\PasteBin.Domain.deps.json
+C:\Users\malts\OneDrive\Рабочий стол\Pastebin\Pastebin\PasteBin.Domain\bin\Debug\net8.0\PasteBin.Domain.dll
+C:\Users\malts\OneDrive\Рабочий стол\Pastebin\Pastebin\PasteBin.Domain\bin\Debug\net8.0\PasteBin.Domain.pdb
+C:\Users\malts\OneDrive\Рабочий стол\Pastebin\Pastebin\PasteBin.Domain\obj\Debug\net8.0\PasteBin.Domain.csproj.AssemblyReference.cache
+C:\Users\malts\OneDrive\Рабочий стол\Pastebin\Pastebin\PasteBin.Domain\obj\Debug\net8.0\PasteBin.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\malts\OneDrive\Рабочий стол\Pastebin\Pastebin\PasteBin.Domain\obj\Debug\net8.0\PasteBin.Domain.AssemblyInfoInputs.cache
+C:\Users\malts\OneDrive\Рабочий стол\Pastebin\Pastebin\PasteBin.Domain\obj\Debug\net8.0\PasteBin.Domain.AssemblyInfo.cs
+C:\Users\malts\OneDrive\Рабочий стол\Pastebin\Pastebin\PasteBin.Domain\obj\Debug\net8.0\PasteBin.Domain.csproj.CoreCompileInputs.cache
+C:\Users\malts\OneDrive\Рабочий стол\Pastebin\Pastebin\PasteBin.Domain\obj\Debug\net8.0\PasteBin.Domain.sourcelink.json
+C:\Users\malts\OneDrive\Рабочий стол\Pastebin\Pastebin\PasteBin.Domain\obj\Debug\net8.0\PasteBin.Domain.dll
+C:\Users\malts\OneDrive\Рабочий стол\Pastebin\Pastebin\PasteBin.Domain\obj\Debug\net8.0\refint\PasteBin.Domain.dll
+C:\Users\malts\OneDrive\Рабочий стол\Pastebin\Pastebin\PasteBin.Domain\obj\Debug\net8.0\PasteBin.Domain.pdb
+C:\Users\malts\OneDrive\Рабочий стол\Pastebin\Pastebin\PasteBin.Domain\obj\Debug\net8.0\ref\PasteBin.Domain.dll
