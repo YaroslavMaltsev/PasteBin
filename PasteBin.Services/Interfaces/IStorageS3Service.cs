@@ -2,9 +2,9 @@
 {
     public interface IStorageS3Service
     {
-        Task<bool> UploadTextToStorage(string textPasteBin, string key);
-        Task<string> GetTextPasteToS3(string key);
-        Task<bool> DeleteTextPasteToS3(string key);
+        Task<bool> UploadTextToStorageAsync(string textPasteBin, string key);
+        Task<string> GetTextPasteToS3Async(string key);
+        Task<bool> DeleteTextPasteToS3Async(string key);
     }
     
 }

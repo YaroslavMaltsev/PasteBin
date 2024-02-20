@@ -17,11 +17,11 @@ namespace PasteBin.Services.Services
             _roleManager = roleManager;
         }
 
-        public async Task<IBaseResponse<bool>> CreateRole()
+        public async Task<IBaseResponse<bool>> CreateRoleAsync()
         {
             var response = BaseResponseBuilder<bool>.GetBaseResponse();
-            //try
-            //{
+            try
+            {
                 bool isAdminRoleExist = await _roleManager.RoleExistsAsync(StaticRoleUsers.ADMIN);
                 bool isUserRoleExist = await _roleManager.RoleExistsAsync(StaticRoleUsers.USER);
 
@@ -40,14 +40,14 @@ namespace PasteBin.Services.Services
                 response.Data = true;
                 response.Description = "Role Create";
                 return response;
-            //}
-            //////catch (Exception ex)
-            ////{
-            //    response.StatusCode = 500;
-            //    response.Description = "Server error";
-            //    response.Data = false;
-            //    return response;
-            ////}
+            }
+            catch (Exception ex)
+            {
+                response.StatusCode = 500;
+                response.Description = "Server error";
+                response.Data = false;
+                return response;
+            }
         }
 
     }

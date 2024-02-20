@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PasteBin.DAL.Data;
+using PasteBin.DAL.Interfaces;
+using PasteBin.DAL.Repositories;
 using PasteBin.Domain.Model;
 using PasteBin.Services.Interfaces;
 using PasteBin.Services.Services;
@@ -66,7 +68,8 @@ builder.Services
         };
     });
 builder.Services.AddScoped<UserManager<User>>();
-builder.Services.AddScoped<IPastRepositories, PastRepositories>();
+builder.Services.AddScoped<PastRepositories>();
+builder.Services.AddScoped<IPastRepositories, CachedPastRepository>();
 builder.Services.AddScoped<IHashService, HashService>();
 builder.Services.AddScoped<IPasteService, PastService>();
 builder.Services.AddScoped<IRegisterService, RegisterService>();
@@ -76,7 +79,7 @@ builder.Services.AddTransient<IRoleService, RoleService>();
 builder.Services.AddScoped<ITokenCreateService, TokenCreateService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IStorageS3Service, StorageS3Service>();
-
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

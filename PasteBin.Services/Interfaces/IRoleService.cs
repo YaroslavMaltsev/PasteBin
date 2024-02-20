@@ -4,6 +4,6 @@ namespace PasteBin.Services.Interfaces
 {
     public interface IRoleService
     {
-        Task<IBaseResponse<bool>> CreateRole();
+        Task<IBaseResponse<bool>> CreateRoleAsync();
     }
 }

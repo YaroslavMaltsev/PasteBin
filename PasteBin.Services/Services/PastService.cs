@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
-using PasteBin.Domain.Interfaces;
+using PasteBin.DAL.Interfaces;
+using PasteBin.Domain.DTOs;
 using PasteBin.Domain.Model;
-using PasteBin.Services.Builder;
+using PasteBin.Services.CustomExptions;
 using PasteBin.Services.Interfaces;
 using PasteBinApi.DAL.Interface;
 using PasteBinApi.Domain.DTOs;
@@ -16,41 +17,38 @@ namespace PasteBin.Services.Services
         private readonly IHashService _hashService;
         private readonly IMapper _mapper;
         private readonly IStorageS3Service _storageS3Service;
+        private readonly IUnitOfWork _unitOfWork;
 
         public PastService(IPastRepositories pastRepositories,
             ITimeCalculationService timeCalculation,
             IHashService hashService,
             IMapper mapper,
-            IStorageS3Service storageS3Service)
+            IStorageS3Service storageS3Service,
+            IUnitOfWork unitOfWork)
         {
             _pastRepositories = pastRepositories;
+
             _timeCalculation = timeCalculation;
+
             _hashService = hashService;
+
             _mapper = mapper;
+
             _storageS3Service = storageS3Service;
+
+            _unitOfWork = unitOfWork;
         }
-        public async Task<IBaseResponse<bool>> CreatePosteService(CreatePasteDto pastCreate, string userId)
+        public async Task<ResponseCreateDto> CreatePosteServiceAsync(CreatePasteDto pastCreate, string userId)
         {
 
-            var response = BaseResponseBuilder<bool>.GetBaseResponse();
-            var key = Guid.NewGuid().ToString();
             try
             {
-                if (pastCreate == null)
+                if (pastCreate == null && userId == null)
                 {
-                    response.Description = "BeadRequest";
-                    response.StatusCode = 400;
-                    return response;
+                    throw new ArgumentBadRequestExption("Check your details and try again later");
                 }
 
-                var responseStorageS3Service = await _storageS3Service.UploadTextToStorage(pastCreate.Text, key);
-
-                if (!responseStorageS3Service)
-                {
-                    response.Description = "S3 Service Error";
-                    response.StatusCode = 500;
-                    return response;
-                }
+                var key = Guid.NewGuid().ToString();
 
                 var past = new Past()
                 {
@@ -62,244 +60,273 @@ namespace PasteBin.Services.Services
                     UserId = userId
                 };
 
-                var responseToSave = await _pastRepositories.CreatePost(past);
-
-                if (responseToSave == false)
+                using (var unitOfWork = _unitOfWork)
                 {
-                    response.StatusCode = 500;
-                    response.Description = "Post not Create";
-                    response.Data = false;
-                    return response;
+
+                    try
+                    {
+                        await unitOfWork.BeginTransactionAsync();
+
+                        await _pastRepositories.CreatePostAsync(past);
+                        await _unitOfWork.SaveChangesAsync();
+
+                        var responseStorageS3Service = await _storageS3Service.UploadTextToStorageAsync(pastCreate.Text, key);
+
+                        if (!responseStorageS3Service)
+                        {
+                            throw new StorageServiceException("S3 Service Erorr");
+                        }
+
+                        await _unitOfWork.CommitTransactionAsync();
+
+                        return new ResponseCreateDto
+                        {
+                            id = past.Id,
+                            hash = past.HashUrl
+
+                        };
+
+                    }
+                    catch (StorageServiceException)
+                    {
+                        await _unitOfWork.RollbackTransactionAsync();
+                        throw;
+                    }
+                    catch (Exception)
+                    {
+                        await _unitOfWork.RollbackTransactionAsync();
+                        throw;
+                    }
                 }
-
-                response.StatusCode = 201;
-                response.Description = "Post Create";
-                response.Data = responseToSave;
-
-                return response;
             }
-            catch (Exception ex)
+            catch
             {
-                response.Description = "Server error";
-                response.StatusCode = 500;
-                return response;
+                throw;
             }
         }
 
-        public async Task<IBaseResponse<bool>> DeletePostService(int id, string userId)
+        public async Task DeletePostServiceAsync(int id, string userId)
         {
-            var response = BaseResponseBuilder<bool>.GetBaseResponse();
-
             try
             {
-                if (id <= 0)
+                if (id <= 0 && userId == null)
                 {
-                    response.Description = "BeadRequest";
-                    response.StatusCode = 400;
-                    return response;
+                    throw new ArgumentBadRequestExption("Check your details and try again later");
                 }
-                var past = await _pastRepositories.GetPastById(id, userId);
+
+                var past = await _pastRepositories.GetPastByIdAsync(id, userId);
 
                 if (past == null)
                 {
-                    response.Description = "NotFound";
-                    response.StatusCode = 404;
-                    return response;
+                    throw new ArgumentNotFoundExption($"Paste with this id was not found : id {id}");
                 }
-                var responseDeleteTextToS3 = await _storageS3Service.DeleteTextPasteToS3(past.Key);
-    
-                var responseToDelete = _pastRepositories.Delete(past);
 
-                if (!responseToDelete && !responseDeleteTextToS3)
+                using (var unitOfWork = _unitOfWork)
                 {
-                    response.StatusCode = 500;
-                    response.Description = "Post don't Delete";
-                    response.Data = responseToDelete;
+                    try
+                    {
+                        await unitOfWork.BeginTransactionAsync();
+
+                        _pastRepositories.Delete(past);
+                        await _unitOfWork.SaveChangesAsync();
+
+                        var responseDeleteTextToS3 = await _storageS3Service.DeleteTextPasteToS3Async(past.Key);
+
+                        if (!responseDeleteTextToS3)
+                        {
+                            throw new StorageServiceException("S3 Service Erorr");
+                        }
+
+                        await _unitOfWork.CommitTransactionAsync();
+                    }
+                    catch (StorageServiceException ex)
+                    {
+                        await _unitOfWork.RollbackTransactionAsync();
+                        throw;
+                    }
+                    catch (Exception)
+                    {
+                        await _unitOfWork.RollbackTransactionAsync();
+                        throw;
+                    }
                 }
-                response.StatusCode = 200;
-                response.Description = "Post on Delete";
-                response.Data = responseToDelete;
-                return response;
             }
-            catch (Exception ex)
+            catch
             {
-                response.StatusCode = 500;
-                response.Description = "Server error";
-                return response;
+                throw;
             }
         }
 
-        public async Task<IBaseResponse<IEnumerable<GetPastDto>>> GetPostAllService(string userId)
+        public async Task<IEnumerable<GetPastDto>> GetPostAllServiceAsync(string userId)
         {
-            var response = BaseResponseBuilder<GetPastDto>.GetBaseResponseAll();
 
             try
             {
-                var pastDto = _mapper.Map<IEnumerable<GetPastDto>>(await _pastRepositories.GetPastAll(userId));
+                var pastDto = _mapper.Map<IEnumerable<GetPastDto>>(await _pastRepositories.GetPastAllAsync(userId));
 
                 if (pastDto == null)
                 {
-                    response.StatusCode = 404;
-                    response.Description = "NotFound";
-                    return response;
+                    throw new ArgumentNotFoundExption("No pastes found for this user");
                 }
-
-                response.StatusCode = 200;
-                response.Description = "Posts";
-                response.Data = pastDto;
-                return response;
+                return pastDto;
             }
-            catch (Exception ex)
+            catch (ArgumentNotFoundExption)
             {
-                response.StatusCode = 500;
-                response.Description = "Server error";
-                return response;
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 
-        public async Task<IBaseResponse<GetPastDto>> GetPostByHashService(string hash)
+        public async Task<GetPastDto> GetPostByHashServiceAsync(string hash)
         {
-            var response = BaseResponseBuilder<GetPastDto>.GetBaseResponse();
             try
             {
                 if (hash == null)
                 {
-                    response.StatusCode = 400;
-                    response.Description = "BeadRequest";
-                    return response;
+                    throw new ArgumentBadRequestExption("Please check the details");
                 }
 
-                var past = await _pastRepositories.GetPostByHash(hash);
-
+                var past = await _pastRepositories.GetPostByHashAsync(hash);
 
                 if (past == null)
                 {
-                    response.StatusCode = 404;
-                    response.Description = "NotFound";
-                    return response;
+                    throw new ArgumentNotFoundExption("Paste with this hash was not found");
                 }
-                past.Views += 1;
 
-                var pastResponse = new GetPastDto
+                var pasteDto = _mapper.Map<GetPastDto>(past);
+
+                var responseTextToS3 = await _storageS3Service.GetTextPasteToS3Async(past.Key);
+                
+                if (responseTextToS3 == null)
                 {
-                    Id = past.Id,
-                    Title = past.Title,
-                    DateDelete = past.DateDelete,
-                    DateCreate = past.DateCreate,
-                    Views = past.Views,
-                    HashUrl = past.HashUrl,
-                    Text = await _storageS3Service.GetTextPasteToS3(past.Key)
-                };
-
-                var responseUpdateViews = _pastRepositories.UpdatePast(past);
-
-                if (!responseUpdateViews)
-                {
-                    response.StatusCode = 500;
-                    response.Description = "Server error";
-                    return response;
+                    throw new StorageServiceException("S3 Service Erorr");
                 }
-                response.StatusCode = 200;
-                response.Description = "Post found";
-                response.Data = pastResponse;
-                return response;
+
+                pasteDto.Text = responseTextToS3;
+
+                return pasteDto;
             }
-            catch (Exception ex)
+            catch (ArgumentBadRequestExption)
             {
-                response.StatusCode = 500;
-                response.Description = "Server error";
-                return response;
+                throw;
+            }
+            catch (ArgumentNotFoundExption)
+            {
+                throw;
+            }
+            catch(StorageServiceException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 
-        public async Task<IBaseResponse<GetPastDto>> GetPostByIdService(int id, string userId)
+        public async Task<GetPastDto> GetPostByIdServiceAsync(int id, string userId)
         {
-            var response = BaseResponseBuilder<GetPastDto>.GetBaseResponse();
             try
             {
-                if (id <= 0)
+                if (id <+ 0)
                 {
-                    response.StatusCode = 400;
-                    response.Description = "BeadRequest";
-                    return response;
+                    throw new ArgumentBadRequestExption("Please check the details");
                 }
 
-                var past = await _pastRepositories.GetPastById(id, userId);
+                var past = await _pastRepositories.GetPastByIdAsync(id, userId);
+
 
                 if (past == null)
                 {
-                    response.StatusCode = 404;
-                    response.Description = "NotFound";
-                    return response;
+                    throw new ArgumentNotFoundExption($"Paste with this id was not found : id {id}");
                 }
 
-                var postResponse = new GetPastDto
-                {
-                    Id = past.Id,
-                    Title = past.Title,
-                    DateDelete = past.DateDelete,
-                    DateCreate = past.DateCreate,
-                    HashUrl = past.HashUrl,
-                    Text = await _storageS3Service.GetTextPasteToS3(past.Key)
-                };
+                var pasteDto = _mapper.Map<GetPastDto>(past);
 
-                response.StatusCode = 200;
-                response.Description = "Post found";
-                response.Data = postResponse;
-                return response;
+                var responseTextToS3 = await _storageS3Service.GetTextPasteToS3Async(past.Key);
+
+                if (responseTextToS3 == null)
+                {
+                    throw new StorageServiceException("S3 Service Erorr");
+                }
+
+                pasteDto.Text = responseTextToS3;
+
+                return pasteDto;
             }
-            catch (Exception ex)
+            catch (ArgumentBadRequestExption)
             {
-                response.StatusCode = 500;
-                response.Description = "Server error";
-                return response;
+                throw;
+            }
+            catch (ArgumentNotFoundExption)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 
-        public async Task<IBaseResponse<bool>> UpdatePostService(UpdatePasteDto updatePast, int id, string userId)
+        public async Task UpdatePostServiceAsync(UpdatePasteDto updatePast, int id, string userId)
         {
-            var response = BaseResponseBuilder<bool>.GetBaseResponse();
             try
             {
                 if (updatePast == null && id <= 0)
                 {
-                    response.StatusCode = 400;
-                    response.Description = "BeadRequest";
-                    return response;
+                    throw new ArgumentBadRequestExption("Check your details and try again later");
                 }
 
-                var past = await _pastRepositories.GetPastById(id, userId);
+                var past = await _pastRepositories.GetPastByIdAsync(id, userId);
 
                 if (past == null)
                 {
-                    response.StatusCode = 400;
-                    response.Description = "BeadRequest";
-                    return response;
+                    throw new ArgumentNotFoundExption($"Paste with this id was not found : id {id}");
                 }
 
                 past.Title = updatePast.Title;
                 past.DateDelete = _timeCalculation.GetTimeToDelete(updatePast.DateSave);
                 past.HashUrl = _hashService.ToString();
 
-                var updateResolver = _pastRepositories.UpdatePast(past);
-
-                if (updateResolver == false)
+                using (var unitOfWork = _unitOfWork)
                 {
-                    response.StatusCode = 500;
-                    response.Description = "Post not updated";
-                    response.Data = updateResolver;
+                    try
+                    {
+                        await unitOfWork.BeginTransactionAsync();
+
+                        _pastRepositories.UpdatePast(past);
+                        await _unitOfWork.SaveChangesAsync();
+
+                        var responseTextToS3 = await _storageS3Service.UploadTextToStorageAsync(updatePast.Text, past.Key);
+
+                        if (!responseTextToS3)
+                        {
+                            throw new StorageServiceException("S3 Service Erorr");
+                        }
+
+                        await _unitOfWork.CommitTransactionAsync();
+                    }
+                    catch (StorageServiceException ex)
+                    {
+                        await _unitOfWork.RollbackTransactionAsync();
+                        throw;
+                    }
+                    catch (Exception ex)
+                    {
+                        await _unitOfWork.RollbackTransactionAsync();
+                        throw;
+                    }
                 }
-                response.StatusCode = 200;
-                response.Description = "Post updated";
-                response.Data = updateResolver;
-                return response;
             }
-            catch (Exception ex)
+            catch
             {
-                response.StatusCode = 500;
-                response.Description = "Service error";
-                return response;
+                throw;
             }
         }
     }
+
 }
+

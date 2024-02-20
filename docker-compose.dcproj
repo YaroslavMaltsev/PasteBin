@@ -4,7 +4,7 @@
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Windows</DockerTargetOS>
     <DockerPublishLocally>False</DockerPublishLocally>
-    <ProjectGuid>edb27eea-68c5-4933-8ee4-862fec67bd97</ProjectGuid>
+    <ProjectGuid>7e0bef97-2c6d-48ea-adc4-ebbdcf3a85a3</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://{ServiceIPAddress}{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>pastebinapi</DockerServiceName>

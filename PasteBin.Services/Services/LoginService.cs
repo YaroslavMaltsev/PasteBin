@@ -20,7 +20,7 @@ namespace PasteBin.Services.Services
             _tokenCreateService = tokenCreateService;
         }
 
-        public async Task<IBaseResponse<string>> Login(LoginDto loginDto)
+        public async Task<IBaseResponse<string>> LoginAsync(LoginDto loginDto)
         {
             var response = BaseResponseBuilder<string>.GetBaseResponse();
 

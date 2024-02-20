@@ -43,11 +43,16 @@ namespace PasteBin.Services.Services
             var tokenObject = new JwtSecurityToken
             (
             issuer: _configuration["JwtConfig:ValidIssuer"],
+
             audience: _configuration["JwtConfig:ValidAudience"],
+
             expires: DateTime.Now.AddDays(1),
+
             claims: authClaim,
+
             signingCredentials: new SigningCredentials(authSecret, SecurityAlgorithms.HmacSha256)
             );
+
             string token = new JwtSecurityTokenHandler().WriteToken(tokenObject);
 
             return token;

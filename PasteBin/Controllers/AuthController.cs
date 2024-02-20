@@ -6,7 +6,7 @@ using PasteBinApi.Domain.DTOs;
 namespace PasteBinApi.Controllers
 {
     [ApiController]
-    [Route("PasteBin/[controller]")]
+    [Route("pastebin/[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly IRegisterService _registerService;
@@ -21,7 +21,7 @@ namespace PasteBinApi.Controllers
         }
 
         [HttpPost]
-        [Route("Register/")]
+        [Route("user-register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -30,7 +30,7 @@ namespace PasteBinApi.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var responseRegister = await _registerService.RegisterUser(registerDto);
+            var responseRegister = await _registerService.RegisterUserAsync(registerDto);
 
             if (responseRegister.StatusCode == 400)
                 return BadRequest(responseRegister.Description);
@@ -42,7 +42,7 @@ namespace PasteBinApi.Controllers
 
         }
         [HttpPost]
-        [Route("Login")]
+        [Route("user-login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -52,7 +52,7 @@ namespace PasteBinApi.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var responseLogin = await _loginService.Login(loginDto);
+            var responseLogin = await _loginService.LoginAsync(loginDto);
 
             if (responseLogin.StatusCode == 400)
                 return BadRequest(responseLogin.Description);

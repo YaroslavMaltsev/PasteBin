@@ -17,7 +17,7 @@ namespace PasteBin.Services.Services
             _userManager = userManager;
         }
 
-        public async Task<IBaseResponse<bool>> UpdateUserRole(UpdateRoleDto updateRoleDto)
+        public async Task<IBaseResponse<bool>> UpdateUserRoleAsync(UpdateRoleDto updateRoleDto)
         {
             var response = BaseResponseBuilder<bool>.GetBaseResponse();
             try
@@ -32,6 +32,7 @@ namespace PasteBin.Services.Services
                     return response;
 
                 }
+
                 await _userManager.AddToRoleAsync(user, StaticRoleUsers.ADMIN);
 
                 response.StatusCode = 200;

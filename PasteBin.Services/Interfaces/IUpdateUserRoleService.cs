@@ -5,6 +5,6 @@ namespace PasteBin.Services.Services
 {
     public interface IUpdateUserRoleService
     {
-        Task<IBaseResponse<bool>> UpdateUserRole(UpdateRoleDto updateRoleDto);
+        Task<IBaseResponse<bool>> UpdateUserRoleAsync(UpdateRoleDto updateRoleDto);
     }
 }

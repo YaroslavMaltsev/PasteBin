@@ -16,7 +16,7 @@ namespace PasteBin.Services.Services
         {
             _userManager = userManager;
         }
-        public async Task<IBaseResponse<bool>> RegisterUser(RegisterDto registerDto)
+        public async Task<IBaseResponse<bool>> RegisterUserAsync(RegisterDto registerDto)
         {
             var response = BaseResponseBuilder<bool>.GetBaseResponse();
             try

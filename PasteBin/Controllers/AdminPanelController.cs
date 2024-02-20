@@ -9,7 +9,7 @@ using PasteBin.Services.Services;
 namespace PasteBinApi.Controllers
 {
     [ApiController]
-    [Route("PasteBin/[controller]")]
+    [Route("pastebin/[controller]")]
    // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AdminPanelController : ControllerBase
     {
@@ -24,7 +24,7 @@ namespace PasteBinApi.Controllers
 
         [HttpPost]
         [Authorize(Roles = StaticRoleUsers.ADMIN)]
-        [Route("UpdateRole")]
+        [Route("update-role")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -33,7 +33,7 @@ namespace PasteBinApi.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var responseUpdaterRole = await _updateUserRoleService.UpdateUserRole(updateRoleDto);
+            var responseUpdaterRole = await _updateUserRoleService.UpdateUserRoleAsync(updateRoleDto);
 
             if (responseUpdaterRole.StatusCode == 400)
                 return BadRequest(responseUpdaterRole.Description);
@@ -53,7 +53,7 @@ namespace PasteBinApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> SeedRoles()
         {
-            var responseSeedRole = await _roleService.CreateRole();
+            var responseSeedRole = await _roleService.CreateRoleAsync();
 
             if (responseSeedRole.StatusCode == 500)
                 return Problem(responseSeedRole.Description);
