@@ -10,6 +10,7 @@ using PasteBin.Services.Interfaces;
 using PasteBin.Services.Services;
 using PasteBinApi.DAL.Interface;
 using PasteBinApi.DAL.Repositories;
+using PasteBinApi.Middleware;
 using PasteBinApi.Services.Interface;
 using PasteBinApi.Services.Service;
 using PasteBinApi.Services.Services;
@@ -67,6 +68,7 @@ builder.Services
 
         };
     });
+builder.Services.AddSingleton<GlobalExceptionsHandling>();
 builder.Services.AddScoped<UserManager<User>>();
 builder.Services.AddScoped<PastRepositories>();
 builder.Services.AddScoped<IPastRepositories, CachedPastRepository>();
@@ -94,11 +96,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.AddGlobalErrorHandler();
 
 app.MapControllers();
 

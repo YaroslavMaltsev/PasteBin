@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = PasteBin.Services
-build_property.ProjectDir = C:\Users\malts\OneDrive\Рабочий стол\PasteBin\PasteBin\PasteBin.Services\
+build_property.ProjectDir = C:\Users\malts\OneDrive\Рабочий стол\Pastebin\Pastebin\PasteBin.Services\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

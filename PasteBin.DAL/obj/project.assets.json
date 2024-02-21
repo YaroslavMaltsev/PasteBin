@@ -4968,11 +4968,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\PasteBin\\PasteBin\\PasteBin.DAL\\PasteBin.DAL.csproj",
+      "projectUniqueName": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\Pastebin\\Pastebin\\PasteBin.DAL\\PasteBin.DAL.csproj",
       "projectName": "PasteBin.DAL",
-      "projectPath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\PasteBin\\PasteBin\\PasteBin.DAL\\PasteBin.DAL.csproj",
+      "projectPath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\Pastebin\\Pastebin\\PasteBin.DAL\\PasteBin.DAL.csproj",
       "packagesPath": "C:\\Users\\malts\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\PasteBin\\PasteBin\\PasteBin.DAL\\obj\\",
+      "outputPath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\Pastebin\\Pastebin\\PasteBin.DAL\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\malts\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -4989,8 +4989,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\malts\\OneDrive\\Рабочий стол\\PasteBin\\PasteBin\\PasteBin.Domain\\PasteBin.Domain.csproj": {
-              "projectPath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\PasteBin\\PasteBin\\PasteBin.Domain\\PasteBin.Domain.csproj"
+            "C:\\Users\\malts\\OneDrive\\Рабочий стол\\Pastebin\\Pastebin\\PasteBin.Domain\\PasteBin.Domain.csproj": {
+              "projectPath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\Pastebin\\Pastebin\\PasteBin.Domain\\PasteBin.Domain.csproj"
             }
           }
         }

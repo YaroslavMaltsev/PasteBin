@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ss317Sb288Lf2mG4GlbVTAyAhw2S0Au1K2y3dnmBzVczFJ54pUBc4oU0G7+nY7zjqEsJZXQFFWYSO4c/fDiWdw==",
+  "dgSpecHash": "0XMlwsNxL8sxajdSkbaba0a07slsXQgq44dGSUpWW13sClS52AoQjjpxanyD7ocy9KjMK+sFuUxp+XYrfm4eIQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\PasteBin\\PasteBin\\PasteBin.Services\\PasteBin.Services.csproj",
+  "projectFilePath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\Pastebin\\Pastebin\\PasteBin.Services\\PasteBin.Services.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\malts\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\malts\\.nuget\\packages\\awssdk.core\\3.7.302.2\\awssdk.core.3.7.302.2.nupkg.sha512",

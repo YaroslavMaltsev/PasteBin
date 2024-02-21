@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "G2ijFFSmqJf+GcXP4WHOc6B5+lkrzO00qtz9QB2ELOPOco9xYqdWMxuvqy+BU4BIvDkyOu8n/PH068PrW0xI5A==",
+  "dgSpecHash": "k2udFYduj04J/t12u747nrsAr0v/bEFRvQPJJaPG8z89FQMrEN/8jyajcTD4/zPfNKxzZaOI4Z4E/k2b/UQrUg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\PasteBin\\PasteBin\\PasteBin.Domain\\PasteBin.Domain.csproj",
+  "projectFilePath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\Pastebin\\Pastebin\\PasteBin.Domain\\PasteBin.Domain.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\malts\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\8.0.1\\microsoft.aspnetcore.cryptography.internal.8.0.1.nupkg.sha512",
     "C:\\Users\\malts\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\8.0.1\\microsoft.aspnetcore.cryptography.keyderivation.8.0.1.nupkg.sha512",

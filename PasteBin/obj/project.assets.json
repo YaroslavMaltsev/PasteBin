@@ -6815,11 +6815,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\PasteBin\\PasteBin\\PasteBin\\PasteBinApi.csproj",
+      "projectUniqueName": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\Pastebin\\Pastebin\\PasteBin\\PasteBinApi.csproj",
       "projectName": "PasteBinApi",
-      "projectPath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\PasteBin\\PasteBin\\PasteBin\\PasteBinApi.csproj",
+      "projectPath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\Pastebin\\Pastebin\\PasteBin\\PasteBinApi.csproj",
       "packagesPath": "C:\\Users\\malts\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\PasteBin\\PasteBin\\PasteBin\\obj\\",
+      "outputPath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\Pastebin\\Pastebin\\PasteBin\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\malts\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -6836,11 +6836,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\malts\\OneDrive\\Рабочий стол\\PasteBin\\PasteBin\\PasteBin.DAL\\PasteBin.DAL.csproj": {
-              "projectPath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\PasteBin\\PasteBin\\PasteBin.DAL\\PasteBin.DAL.csproj"
+            "C:\\Users\\malts\\OneDrive\\Рабочий стол\\Pastebin\\Pastebin\\PasteBin.DAL\\PasteBin.DAL.csproj": {
+              "projectPath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\Pastebin\\Pastebin\\PasteBin.DAL\\PasteBin.DAL.csproj"
             },
-            "C:\\Users\\malts\\OneDrive\\Рабочий стол\\PasteBin\\PasteBin\\PasteBin.Services\\PasteBin.Services.csproj": {
-              "projectPath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\PasteBin\\PasteBin\\PasteBin.Services\\PasteBin.Services.csproj"
+            "C:\\Users\\malts\\OneDrive\\Рабочий стол\\Pastebin\\Pastebin\\PasteBin.Services\\PasteBin.Services.csproj": {
+              "projectPath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\Pastebin\\Pastebin\\PasteBin.Services\\PasteBin.Services.csproj"
             }
           }
         }

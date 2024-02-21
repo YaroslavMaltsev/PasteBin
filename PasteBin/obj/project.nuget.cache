@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Alb06fmgc3yAgCbwPgPXKyVpC+bX998bGG18W9S39dRNISlmr0bZv3CqWbBXGegU465ohTXp7NzTEY/7nQxEsA==",
+  "dgSpecHash": "qM9HrF2FlbKGjWoToguIHjsEigwYAzZUcCzDYeIRktetlmhTisHTcQDZpg87I28of0fQNQGMXPCwaH8qyXoOFA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\PasteBin\\PasteBin\\PasteBin\\PasteBinApi.csproj",
+  "projectFilePath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\Pastebin\\Pastebin\\PasteBin\\PasteBinApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\malts\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\malts\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

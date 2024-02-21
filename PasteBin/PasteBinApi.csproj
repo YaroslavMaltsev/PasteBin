@@ -36,8 +36,4 @@
     <ProjectReference Include="..\PasteBin.Services\PasteBin.Services.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Middleware\" />
-  </ItemGroup>
-
 </Project>

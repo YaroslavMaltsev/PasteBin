@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "RQ2xb7I9lwFrXgCFk1jYFLQaz5w926Q3lzjMryFSXlPq5eORZs4hG0T7AwEdy0npSpuCQv3YxYdUyYhVKBohAQ==",
+  "dgSpecHash": "Vs/veI2Mn3jXht75WdpPdfNHNzhParBVdi7ASSGpM/RxCePazN/Z9CJp5LtKwuStbYRt5axvyql/wM1ww/kbjQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\PasteBin\\PasteBin\\PasteBin.DAL\\PasteBin.DAL.csproj",
+  "projectFilePath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\Pastebin\\Pastebin\\PasteBin.DAL\\PasteBin.DAL.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\malts\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\malts\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
