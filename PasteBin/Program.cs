@@ -6,6 +6,10 @@ using PasteBin.DAL.Data;
 using PasteBin.DAL.Interfaces;
 using PasteBin.DAL.Repositories;
 using PasteBin.Domain.Model;
+using PasteBin.Services.CommandsQueries.Commands.Create;
+using PasteBin.Services.CommandsQueries.Commands.Delete;
+using PasteBin.Services.CommandsQueries.Commands.Update;
+using PasteBin.Services.CommandsQueries.Queries.Get;
 using PasteBin.Services.Interfaces;
 using PasteBin.Services.Services;
 using PasteBinApi.DAL.Interface;
@@ -54,6 +58,7 @@ builder.Services
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     })
+
     .AddJwtBearer(options =>
     {
         options.SaveToken = true;
@@ -68,12 +73,12 @@ builder.Services
 
         };
     });
+
 builder.Services.AddSingleton<GlobalExceptionsHandling>();
 builder.Services.AddScoped<UserManager<User>>();
 builder.Services.AddScoped<PastRepositories>();
 builder.Services.AddScoped<IPastRepositories, CachedPastRepository>();
 builder.Services.AddScoped<IHashService, HashService>();
-builder.Services.AddScoped<IPasteService, PastService>();
 builder.Services.AddScoped<IRegisterService, RegisterService>();
 builder.Services.AddSingleton<ITimeCalculationService, TimeCalculationService>();
 builder.Services.AddScoped<IUpdateUserRoleService, UpdateUserRoleService>();
@@ -82,6 +87,12 @@ builder.Services.AddScoped<ITokenCreateService, TokenCreateService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IStorageS3Service, StorageS3Service>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IDeletePaste, DeletePaste>();
+builder.Services.AddScoped<IUpdatePaste,UpdatePaste>();
+builder.Services.AddScoped<ICreatePaste, CreatePaste>();
+builder.Services.AddScoped<IGetPasteAll, GetPasteAll>();
+builder.Services.AddScoped<IGetPasteByHash, GetPasteByHash>();
+builder.Services.AddScoped<IGetPasteById, GetPasteById>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -89,7 +100,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
 
 
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

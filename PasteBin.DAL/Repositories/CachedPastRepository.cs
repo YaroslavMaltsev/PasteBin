@@ -1,10 +1,10 @@
 ﻿using PasteBin.Domain.Model;
-using PasteBinApi.DAL.Interface;
+
 using PasteBinApi.DAL.Repositories;
 
 namespace PasteBin.DAL.Repositories
 {
-    public class CachedPastRepository : IPastRepositories
+    public class CachedPastRepository : PasteBinApi.DAL.Interface.IPastRepositories
     {
         private readonly PastRepositories _pastRepositories;
 

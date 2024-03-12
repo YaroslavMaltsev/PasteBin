@@ -11,7 +11,7 @@
         "projectName": "PasteBin.Domain",
         "projectPath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\Pastebin\\Pastebin\\PasteBin.Domain\\PasteBin.Domain.csproj",
         "packagesPath": "C:\\Users\\malts\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\Pastebin\\Pastebin\\PasteBin.Domain\\obj\\",
+        "outputPath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\PasteBin\\PasteBin\\PasteBin.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\malts\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -46,27 +46,27 @@
           "dependencies": {
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.1, )"
+              "version": "[8.0.3, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.2, )"
+              "version": "[8.0.3, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.1, )"
+              "version": "[8.0.3, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[8.0.1, )"
+              "version": "[8.0.3, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.1, )"
+              "version": "[8.0.3, )"
             },
             "MySql.EntityFrameworkCore": {
               "target": "Package",
@@ -100,7 +100,7 @@
         "projectName": "PasteBin.Domain",
         "projectPath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\Pastebin\\Pastebin\\PasteBin.Domain\\PasteBin.Domain.csproj",
         "packagesPath": "C:\\Users\\malts\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\Pastebin\\Pastebin\\PasteBin.Domain\\obj\\",
+        "outputPath": "C:\\Users\\malts\\OneDrive\\Рабочий стол\\PasteBin\\PasteBin\\PasteBin.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\malts\\AppData\\Roaming\\NuGet\\NuGet.Config",

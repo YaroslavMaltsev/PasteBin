@@ -7,7 +7,6 @@ C:\Users\malts\OneDrive\Рабочий стол\Pastebin\Pastebin\PasteBin\bin\D
 C:\Users\malts\OneDrive\Рабочий стол\Pastebin\Pastebin\PasteBin\bin\Debug\net8.0\PasteBinApi.dll
 C:\Users\malts\OneDrive\Рабочий стол\Pastebin\Pastebin\PasteBin\bin\Debug\net8.0\PasteBinApi.pdb
 C:\Users\malts\OneDrive\Рабочий стол\Pastebin\Pastebin\PasteBin\bin\Debug\net8.0\AutoMapper.dll
-C:\Users\malts\OneDrive\Рабочий стол\Pastebin\Pastebin\PasteBin\bin\Debug\net8.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\malts\OneDrive\Рабочий стол\Pastebin\Pastebin\PasteBin\bin\Debug\net8.0\AWSSDK.Core.dll
 C:\Users\malts\OneDrive\Рабочий стол\Pastebin\Pastebin\PasteBin\bin\Debug\net8.0\AWSSDK.S3.dll
 C:\Users\malts\OneDrive\Рабочий стол\Pastebin\Pastebin\PasteBin\bin\Debug\net8.0\Azure.Core.dll

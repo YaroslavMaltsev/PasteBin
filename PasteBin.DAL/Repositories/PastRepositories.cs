@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PasteBin.DAL.Data;
 using PasteBin.Domain.Model;
-using PasteBinApi.DAL.Interface;
 
 namespace PasteBinApi.DAL.Repositories
 {
-    public class PastRepositories : IPastRepositories
+    public class PastRepositories
     {
         private readonly ApplicationDbContext _context;
 

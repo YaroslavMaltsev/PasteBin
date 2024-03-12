@@ -11,11 +11,11 @@ namespace PasteBinApi.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PastController : ControllerBase
     {
-        private readonly IPasteService _pasteService;
 
-        public PastController(IPasteService pasteService)
+
+        public PastController()
         {
-            _pasteService = pasteService;
+           
         }
 
         [HttpGet]

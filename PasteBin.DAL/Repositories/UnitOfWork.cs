@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿
+
+
 using PasteBin.DAL.Data;
 using PasteBin.DAL.Interfaces;
 using PasteBinApi.DAL.Interface;
-using PasteBinApi.DAL.Repositories;
 
 namespace PasteBin.DAL.Repositories
 {
