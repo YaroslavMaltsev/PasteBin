@@ -1,2 +1,2 @@
 # PasteBin
-A connection was successfully established with the server, but then an error occurred during the pre-login handshake. (provider: TCP Provider, error: 35 - An internal exception was caught)'
+Microsoft.Data.SqlClient.SqlException: 'A connection was successfully established with the server, but then an error occurred during the pre-login handshake. (provider: TCP Provider, error: 35 - An internal exception was caught)' при подключение с Эмулятора Android строка подключения Data Source= local;User Id=sa; Password=66;Initial Catalog=IMS_Medis;TrustServerCertificate=True;Encrypt=False;"
